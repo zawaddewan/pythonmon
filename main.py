@@ -1,6 +1,7 @@
 from csv_helper import *
 import time
 from pprint import pprint
+import random
 
 def lowercase(s):
     newstring = ''
@@ -32,7 +33,9 @@ def gamestart():
     time.sleep(1)
     print('> Play')
     print('> Credits')
-    option = lowercase(input())
+    option = ''
+    while option not in ['credits', 'play']:
+        option = lowercase(input())
     if option ==  'credits':
         print('Charizard ASCII art: https://www.asciiart.eu/video-games/pokemon')
         while option != 'play':
@@ -105,9 +108,63 @@ def othercalc(base, IV, EV, nature, stat):
     nmod = natmodcalc(nature, stat)
     return ((((2 * base + IV + (EV / 4)) * 50) / 100) + 5) * nmod
 
-def damagecalc(attack, enemydefense, pow, critmod, atkstage):
+def damagecalc(attack, enemydefense, pow, critmod, atkstage, weather, movetype):
+    modifier = modifiercalc(weather, movetype, attackertypes, effectiveness, burn)
     damage = (((((((2 * 50) / 5) + 2) * pow * (attack * (1 + (atkstage / 2)))) / defense ) / 50) + 2) * modifier
-    return
+    return damage
 
-def modifiercalc():
-    return
+def modifiercalc(weather, movetype, attackertypes, effectiveness, burn):
+    modifier = 1
+    if (movetype == 'water' and weather == 'rain') or (movetype == 'fire' and weather == 'harsh sunlight'):
+        modifier *= 1.5
+    elif (movetype == 'water' and weather == 'harsh sunlight') or (movetype == 'fire' and weather == 'rain'):
+        modifier *= 0.5
+    if movetype in attackertypes:
+        modifier *= 1.5
+    modifier *= burn
+    rand = (random.randint(85, 100)) * 0.01
+    modifier *= rand
+    modifier *= effectiveness
+    if random.randint(0, 24) == 0:
+        modifier += 1.5
+    return modifier
+
+print(modifiercalc('rain', 'water', ['water', 'ground'], 1.5, 1))
+
+def typeidtotype(id):
+    if id == 1:
+        return 'normal'
+    if id == 2:
+        return 'fighting'
+    if id == 3:
+        return 'flying'
+    if id == 4:
+        return 'poison'
+    if id == 5:
+        return 'ground'
+    if id == 6:
+        return 'rock'
+    if id == 7:
+        return 'bug'
+    if id == 8:
+        return 'ghost'
+    if id == 9:
+        return 'steel'
+    if id == 10:
+        return 'fire'
+    if id == 11:
+        return 'water'
+    if id == 12:
+        return 'grass'
+    if id == 13:
+        return 'electric'
+    if id == 14:
+        return 'pyschic'
+    if id == 15:
+        return 'ice'
+    if id == 16:
+        return 'dragon'
+    if id == 17:
+        return 'dark'
+    if id == 18:
+        return 'fairy'
