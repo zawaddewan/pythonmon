@@ -1,10 +1,10 @@
 def calcEffectiveness(atktype, enemytype1, enemytype2):
-    effectiveness == 1
+    effectiveness = 1
     if atktype == 'normal':
         if (enemytype1 == 'rock') or (enemytype2 == 'rock'):
             effectiveness *= 0.5
         if (enemytype1 == 'ghost') or (enemytype2 == 'ghost'):
-            [set effectiveness effectiveness * 0]
+            effectiveness *= 0
         if (enemytype1 == 'steel') or (enemytype2 == 'steel'):
             effectiveness *= 0.5
     if atktype == 'fire':
@@ -45,7 +45,7 @@ def calcEffectiveness(atktype, enemytype1, enemytype2):
         if (enemytype1 == 'grass') or (enemytype2 == 'grass'):
             effectiveness *= 0.5
         if (enemytype1 == 'ground') or (enemytype2 == 'ground'):
-            [set effectiveness effectiveness * 0]
+            effectiveness *= 0
         if (enemytype1 == 'flying') or (enemytype2 == 'flying'):
             effectiveness *= 2
         if (enemytype1 == 'dragon') or (enemytype2 == 'dragon'):
@@ -104,7 +104,7 @@ def calcEffectiveness(atktype, enemytype1, enemytype2):
         if (enemytype1 == 'rock') or (enemytype2 == 'rock'):
             effectiveness *= 2
         if (enemytype1 == 'ghost') or (enemytype2 == 'ghost'):
-            [set effectiveness effectiveness * 0]
+            effectiveness *= 0
         if (enemytype1 == 'dark') or (enemytype2 == 'dark'):
             effectiveness *= 2
         if (enemytype1 == 'steel') or (enemytype2 == 'steel'):
@@ -123,7 +123,7 @@ def calcEffectiveness(atktype, enemytype1, enemytype2):
         if (enemytype1 == 'ghost') or (enemytype2 == 'ghost'):
             effectiveness *= 0.5
         if (enemytype1 == 'steel') or (enemytype2 == 'steel'):
-            [set effectiveness effectiveness * 0]
+            effectiveness *= 0
         if (enemytype1 == 'fairy') or (enemytype2 == 'fairy'):
             effectiveness *= 2
     if atktype == 'ground':
@@ -136,7 +136,7 @@ def calcEffectiveness(atktype, enemytype1, enemytype2):
         if (enemytype1 == 'poison') or (enemytype2 == 'poison'):
             effectiveness *= 2
         if (enemytype1 == 'flying') or (enemytype2 == 'flying'):
-            [set effectiveness effectiveness * 0]
+            effectiveness *= 0
         if (enemytype1 == 'bug') or (enemytype2 == 'bug'):
             effectiveness *= 0.5
         if (enemytype1 == 'rock') or (enemytype2 == 'rock'):
@@ -164,7 +164,7 @@ def calcEffectiveness(atktype, enemytype1, enemytype2):
         if (enemytype1 == 'psychic') or (enemytype2 == 'psychic'):
             effectiveness *= 0.5
         if (enemytype1 == 'dark') or (enemytype2 == 'dark'):
-            [set effectiveness effectiveness * 0]
+            effectiveness *= 0
         if (enemytype1 == 'steel') or (enemytype2 == 'steel'):
             effectiveness *= 0.5
     if atktype == 'bug':
@@ -205,7 +205,7 @@ def calcEffectiveness(atktype, enemytype1, enemytype2):
             effectiveness *= 0.5
     if atktype == 'ghost':
         if (enemytype1 == 'normal') or (enemytype2 == 'normal'):
-            [set effectiveness effectiveness * 0]
+            effectiveness *= 0
         if (enemytype1 == 'psychic') or (enemytype2 == 'psychic'):
             effectiveness *= 2
         if (enemytype1 == 'ghost') or (enemytype2 == 'ghost'):
@@ -218,7 +218,7 @@ def calcEffectiveness(atktype, enemytype1, enemytype2):
         if (enemytype1 == 'steel') or (enemytype2 == 'steel'):
             effectiveness *= 0.5
         if (enemytype1 == 'fairy') or (enemytype2 == 'fairy'):
-            [set effectiveness effectiveness * 0]
+            effectiveness *= 0
     if atktype == 'dark':
         if (enemytype1 == 'fighting') or (enemytype2 == 'fighting'):
             effectiveness *= 0.5

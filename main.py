@@ -1,5 +1,5 @@
 from csv_helper import *
-from effectiveness_helper import calcEffectiveness
+from effectiveness_helper import *
 from pprint import pprint
 import random
 import time
@@ -57,6 +57,7 @@ def gamestart():
         while option != 'Play':
             option = spellcheck(input())
     if option == 'Play':
+        time.sleep(0.3)
         print('Welcome to the World of Pythonmon!')
         time.sleep(1)
         print('Select your Pokemon:')
@@ -80,8 +81,23 @@ def gamestart():
             while gamechoice not in ['End', 'Search', 'Pokecenter', 'Pokeshop']:
                 gamechoice = spellcheck(input())
             time.sleep(1)
+
             if gamechoice == 'End': #Ends the game
                 gamestate = False
+
+            if gamechoice == 'Pokecenter': #Pokecenter option
+                gamewait(1)
+                print('What would you like to do?')
+                pokecenteroption = ''
+                while pokecenteroption != 'Leave':
+                    time.sleep(0.5)
+                    print('> Heal\n> Leave')
+                    pokecenteroption = spellcheck(input())
+                    if pokecenteroption ==  'Heal':
+                        gamewait(4)
+                        chosentruestats['HP'] = chosentruestats['MAXHP']
+                        print('Your pokemon has been healed.')
+
             if gamechoice == 'Search': #Searchs for pokemon
                 weather = 'None' #Resets weather
                 enemypokemon = random.choice(pokemonlist)
@@ -107,13 +123,13 @@ def gamestart():
                     chosenmovefinder = movesdictfinal[removespacelower(chosenmove)] #Gives data for chosenmove
                     chosenmovetype = typeidtotype(chosenmovefinder['type_id']) #Gives move type
                     chosentypes = [chosentruestats['Type 1'], chosentruestats['Type 2']] #Makes a list of chosen pokemon's types
+                    enemytypes = [chosentruestats['Type 1'], chosentruestats['Type 2']]
                     if chosenmovefinder['damage_class_id'] == 2:
                         chosenburn = burnmodcalc(chosentruestats['nonvolatile'])
-                        chosendamage = damagecalc(chosentruestats['Attack'], enemytruestats['Defense'], chosenmovefinder['power'], chosentruestats['atkstage'], weather, chosenburn, chosenmovetype, chosentypes)
+                        chosendamage = damagecalc(chosentruestats['Attack'], enemytruestats['Defense'], chosenmovefinder['power'], chosentruestats['atkstage'], weather, chosenburn, chosenmovetype, chosentypes, enemytypes)
                     if chosenmovefinder['damage_class_id'] == 3:
                         chosenburn = 1
-                        chosendamage = damagecalc(chosentruestats['Sp. Atk'], enemytruestats['Sp. Def'], chosenmovefinder['power'], chosentruestats['spatkstage'], weather, chosenburn, chosenmovetype, chosentypes)
-                print(chosendamage)
+                        chosendamage = damagecalc(chosentruestats['Sp. Atk'], enemytruestats['Sp. Def'], chosenmovefinder['power'], chosentruestats['spatkstage'], weather, chosenburn, chosenmovetype, chosentypes, enemytypes)
 
 
 
@@ -183,10 +199,11 @@ def othercalc(base, IV, EV, nature, stat):
     nmod = natmodcalc(nature, stat)
     return (((((2 * base + IV + ((EV / 4) // 1)) * 50) / 100) // 1 + 5) * nmod) // 1
 
-def damagecalc(attack, enemydefense, pow, atkstage, weather, burn, movetype, attackertypes):
+def damagecalc(attack, enemydefense, pow, atkstage, weather, burn, movetype, attackertypes, defendertypes):
+    effectiveness = calcEffectiveness(movetype, defendertypes[0], defendertypes[1])
     modifier = modifiercalc(weather, movetype, attackertypes, effectiveness, burn)
-    damage = (((((((2 * 50) / 5) + 2) * pow * (attack * (1 + (atkstage / 2)))) / defense ) / 50) + 2) * modifier
-    return damage
+    damage = (((((((2 * 50) / 5) + 2) * pow * (attack * (1 + (atkstage / 2)))) / enemydefense ) / 50) + 2) * modifier
+    return int(damage // 1)
 
 def modifiercalc(weather, movetype, attackertypes, effectiveness, burn):
     modifier = 1
@@ -318,22 +335,23 @@ def calctruestats(dict):
     newdict['Type 1'] = dict['Type 1']
     newdict['Type 2'] = dict['Type 2']
 
-    hpstat = float(hpcalc(int(dict['HP']), dict['hpiv'], dict['hpev']))
+    hpstat = int(hpcalc(int(dict['HP']), dict['hpiv'], dict['hpev']))
+    newdict['MAXHP'] = hpstat
     newdict['HP'] = hpstat
 
-    atkstat = float(othercalc(int(dict['Attack']), dict['atkiv'], dict['atkev'], dict['nature'], 'atk'))
+    atkstat = int(othercalc(int(dict['Attack']), dict['atkiv'], dict['atkev'], dict['nature'], 'atk'))
     newdict['Attack'] = atkstat
 
-    defstat = float(othercalc(int(dict['Defense']), dict['defiv'], dict['defev'], dict['nature'], 'def'))
+    defstat = int(othercalc(int(dict['Defense']), dict['defiv'], dict['defev'], dict['nature'], 'def'))
     newdict['Defense'] = defstat
 
-    spatkstat = float(othercalc(int(dict['Sp. Atk']), dict['spatkiv'], dict['spatkev'], dict['nature'], 'spatk'))
+    spatkstat = int(othercalc(int(dict['Sp. Atk']), dict['spatkiv'], dict['spatkev'], dict['nature'], 'spatk'))
     newdict['Sp. Atk'] = spatkstat
 
-    spdefstat = float(othercalc(int(dict['Sp. Def']), dict['spdefiv'], dict['spdefev'], dict['nature'], 'spdef'))
+    spdefstat = int(othercalc(int(dict['Sp. Def']), dict['spdefiv'], dict['spdefev'], dict['nature'], 'spdef'))
     newdict['Sp. Def'] = spdefstat
 
-    spdstat = float(othercalc(int(dict['Speed']), dict['spdiv'], dict['spdev'], dict['nature'], 'spd'))
+    spdstat = int(othercalc(int(dict['Speed']), dict['spdiv'], dict['spdev'], dict['nature'], 'spd'))
     newdict['Speed'] = spdstat
 
     return newdict
