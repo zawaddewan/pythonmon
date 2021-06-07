@@ -14,11 +14,25 @@ def lowercase(s):
         i += 1
     return newstring
 
+def forceupper(s):
+    newstring = ''
+    if s[0] > 'a' and s[0] < 'z':
+        newstring += chr(ord(s[0]) - 32)
+    else:
+        newstring += s[0]
+    i = 1
+    while i < len(s):
+        newstring += s[i]
+        i += 1
+    return newstring
+
+def spellcheck(s):
+    return forceupper(lowercase(s))
+
 logofile = open('logo2.txt')
 logo = logofile.read()
 
 pokemonlist = ['Charizard', 'Greninja', 'Raichu', 'Lucario', 'Empoleon']
-lowercasepoke = list(map(lowercase, pokemonlist))
 
 def makepokemonchoice(list):
     i = 0
@@ -34,23 +48,43 @@ def gamestart():
     print('> Play')
     print('> Credits')
     option = ''
-    while option not in ['credits', 'play']:
-        option = lowercase(input())
-    if option ==  'credits':
+    while option not in ['Credits', 'Play']:
+        option = spellcheck(input())
+    if option ==  'Credits':
         print('Charizard ASCII art: https://www.asciiart.eu/video-games/pokemon')
-        while option != 'play':
-            option = lowercase(input())
-    if option == 'play':
+        while option != 'Play':
+            option = spellcheck(input())
+    if option == 'Play':
         print('Welcome to the World of Pythonmon!')
         time.sleep(1)
         print('Select your Pokemon:')
         time.sleep(1)
         print(makepokemonchoice(pokemonlist))
         chosenpokemon = ''
-        while chosenpokemon not in lowercasepoke:
-            chosenpokemon = lowercase(input())
+        while chosenpokemon not in pokemonlist:
+            chosenpokemon = spellcheck(input())
+        chosenbasestats = pokemondictfinal[chosenpokemon]
+        chosenbasestats['nature'] = random.choice(naturelist)
+        randomivs(chosenbasestats)
+        gamestate = True
+        while gamestate == True:
+            time.sleep(1)
+            print('> Search\n> Pokecenter\n> End')
+            gamechoice = ''
+            while gamechoice not in ['end', 'search', 'pokecenter']:
+                gamechoice = lowercase(input())
+            time.sleep(1)
+            if gamechoice == 'end':
+                gamestate = False
+            if gamechoice == 'search':
+                enemypokemon = random.choice(pokemonlist)
+                enemybasestats = pokemondictfinal[enemypokemon]
+                enemybasestats['nature'] = random.choice(naturelist)
+                randomivs(enemybasestats)
+                gamewait(3)
+                print("You've encountered a wild " + str(enemypokemon) + '.')
 
-gamestart()
+
 
 movesfile = open('moves.csv')
 moves = movesfile.read()
@@ -168,3 +202,27 @@ def typeidtotype(id):
         return 'dark'
     if id == 18:
         return 'fairy'
+
+naturelist = [0, 1, 2, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24]
+
+def gamewait(n):
+    i = 0
+    while i < n:
+        print('.\n')
+        i += 1
+        time.sleep(0.8)
+
+def randomivs(dict):
+    dict['hpiv'] = random.randint(0, 31)
+    dict['atkiv'] = random.randint(0, 31)
+    dict['defiv'] = random.randint(0, 31)
+    dict['spatkiv'] = random.randint(0, 31)
+    dict['spdefiv'] = random.randint(0, 31)
+    dict['spdiv'] = random.randint(0, 31)
+
+def calctruestats(dict):
+    newdict = {}
+    dict['Type 1'] = 0
+    return
+
+gamestart()
