@@ -1,6 +1,7 @@
 from csv_helper import *
 from pprint import pprint
 import random
+import time
 
 def lowercase(s):
     newstring = ''
@@ -42,7 +43,9 @@ def makepokemonchoice(list):
     return string
 
 def gamestart():
+    #Starting menu
     print(logo)
+    time.sleep(1)
     print('> Play')
     print('> Credits')
     option = ''
@@ -54,43 +57,62 @@ def gamestart():
             option = spellcheck(input())
     if option == 'Play':
         print('Welcome to the World of Pythonmon!')
+        time.sleep(1)
         print('Select your Pokemon:')
+        time.sleep(1)
         print(makepokemonchoice(pokemonlist))
         chosenpokemon = ''
         while chosenpokemon not in pokemonlist:
-            chosenpokemon = spellcheck(input())
+            #chosenpokemon = spellcheck(input()) (TESTING)
+            chosenpokemon = 'Charizard'
         chosenbasestats = pokemondictfinal[chosenpokemon]
         chosenbasestats['nature'] = random.choice(naturelist)
         randomEViv(chosenbasestats)
         chosentruestats = calctruestats(chosenbasestats)
+        giveothervalues(chosentruestats)
         gamestate = True
+        #Starts the game
         while gamestate == True:
-            print('> Search\n> Pokecenter\n> End')
+            time.sleep(1)
+            print('> Search\n> Pokecenter\n> Pokeshop\n> End')
             gamechoice = ''
             while gamechoice not in ['End', 'Search', 'Pokecenter', 'Pokeshop']:
                 gamechoice = spellcheck(input())
-            if gamechoice == 'end':
+            time.sleep(1)
+            if gamechoice == 'End': #Ends the game
                 gamestate = False
-            if gamechoice == 'search':
+            if gamechoice == 'Search': #Searchs for pokemon
+                weather = 'None' #Resets weather
                 enemypokemon = random.choice(pokemonlist)
                 enemybasestats = pokemondictfinal[enemypokemon]
                 enemybasestats['nature'] = random.choice(naturelist)
                 randomEViv(enemybasestats)
                 enemytruestats = calctruestats(enemybasestats)
+                giveothervalues(enemytruestats)
                 gamewait(3)
                 print("You've encountered a wild " + str(enemypokemon) + '.')
+                time.sleep(0.5)
                 print('What do you want to do?')
                 print('> Fight\n> Bag\n> Run')
                 battleoption = ''
                 while battleoption not in ['Fight', 'Bag', 'Run']:
                     battleoption = spellcheck(input())
-                if battleoption = 'Fight':
+                if battleoption == 'Fight':
+                    time.sleep(0.5)
                     printpokemoves(chosenpokemon)
                     chosenmove = ''
                     while chosenmove not in pokemoveslist[chosenpokemon]:
                         chosenmove = spellcheck(input())
-
-                print(chosentruestats, enemytruestats)
+                    chosenmovefinder = movesdictfinal[removespacelower(chosenmove)] #Gives data for chosenmove
+                    chosenmovetype = typeidtotype(chosenmovefinder['type_id']) #Gives move type
+                    chosentypes = [chosentruestats['Type 1'], chosentruestats['Type 2']] #Makes a list of chosen pokemon's types
+                    if chosenmovefinder['damage_class_id'] == 2:
+                        chosenburn = burnmodcalc(chosentruestats['nonvolatile'])
+                        chosendamage = damagecalc(chosentruestats['Attack'], enemytruestats['Defense'], chosenmovefinder['power'], chosentruestats['atkstage'], weather, chosenburn, chosenmovetype, chosentypes)
+                    if chosenmovefinder['damage_class_id'] == 3:
+                        chosenburn = 1
+                        chosendamage = damagecalc(chosentruestats['Sp. Atk'], enemytruestats['Sp. Def'], chosenmovefinder['power'], chosentruestats['spatkstage'], weather, chosenburn, chosenmovetype, chosentypes)
+                print(chosendamage)
 
 
 
@@ -160,7 +182,7 @@ def othercalc(base, IV, EV, nature, stat):
     nmod = natmodcalc(nature, stat)
     return (((((2 * base + IV + ((EV / 4) // 1)) * 50) / 100) // 1 + 5) * nmod) // 1
 
-def damagecalc(attack, enemydefense, pow, critmod, atkstage, weather, movetype):
+def damagecalc(attack, enemydefense, pow, atkstage, weather, burn, movetype, attackertypes):
     modifier = modifiercalc(weather, movetype, attackertypes, effectiveness, burn)
     damage = (((((((2 * 50) / 5) + 2) * pow * (attack * (1 + (atkstage / 2)))) / defense ) / 50) + 2) * modifier
     return damage
@@ -181,7 +203,6 @@ def modifiercalc(weather, movetype, attackertypes, effectiveness, burn):
         modifier += 1.5
     return modifier
 
-print(modifiercalc('rain', 'water', ['water', 'ground'], 1.5, 1))
 
 def typeidtotype(id):
     if id == 1:
@@ -221,6 +242,8 @@ def typeidtotype(id):
     if id == 18:
         return 'fairy'
 
+
+
 naturelist = [0, 1, 2, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24]
 
 def gamewait(n):
@@ -228,6 +251,7 @@ def gamewait(n):
     while i < n:
         print('.\n')
         i += 1
+        time.sleep(0.8)
 
 
 def randomivs(dict):
@@ -263,31 +287,52 @@ def randomevs(dict):
             dict['spdev'] += 1
         totalev += 1
 
+def givestatstages(dict):
+    dict['atkstage'] = 0
+    dict['defstage'] = 0
+    dict['spatkstage'] = 0
+    dict['spdefstage'] = 0
+    dict['spdstage'] = 0
+
+def givestatuses(dict):
+    dict['nonvolatile'] = '0'
+    dict['volatile'] = []
+
 def randomEViv(dict):
     randomivs(dict)
     randomevs(dict)
+
+def giveothervalues(dict):
+    givestatstages(dict)
+    givestatuses(dict)
+
+def burnmodcalc(status):
+    if status == 'burn':
+        return 0.5
+    else:
+        return 1
 
 def calctruestats(dict):
     newdict = {}
     newdict['Type 1'] = dict['Type 1']
     newdict['Type 2'] = dict['Type 2']
 
-    hpstat = hpcalc(int(dict['HP']), dict['hpiv'], dict['hpev'])
+    hpstat = float(hpcalc(int(dict['HP']), dict['hpiv'], dict['hpev']))
     newdict['HP'] = hpstat
 
-    atkstat = othercalc(int(dict['Attack']), dict['atkiv'], dict['atkev'], dict['nature'], 'atk')
+    atkstat = float(othercalc(int(dict['Attack']), dict['atkiv'], dict['atkev'], dict['nature'], 'atk'))
     newdict['Attack'] = atkstat
 
-    defstat = othercalc(int(dict['Defense']), dict['defiv'], dict['defev'], dict['nature'], 'def')
+    defstat = float(othercalc(int(dict['Defense']), dict['defiv'], dict['defev'], dict['nature'], 'def'))
     newdict['Defense'] = defstat
 
-    spatkstat = othercalc(int(dict['Sp. Atk']), dict['spatkiv'], dict['spatkev'], dict['nature'], 'spatk')
+    spatkstat = float(othercalc(int(dict['Sp. Atk']), dict['spatkiv'], dict['spatkev'], dict['nature'], 'spatk'))
     newdict['Sp. Atk'] = spatkstat
 
-    spdefstat = othercalc(int(dict['Sp. Def']), dict['spdefiv'], dict['spdefev'], dict['nature'], 'spdef')
+    spdefstat = float(othercalc(int(dict['Sp. Def']), dict['spdefiv'], dict['spdefev'], dict['nature'], 'spdef'))
     newdict['Sp. Def'] = spdefstat
 
-    spdstat = othercalc(int(dict['Speed']), dict['spdiv'], dict['spdev'], dict['nature'], 'spd')
+    spdstat = float(othercalc(int(dict['Speed']), dict['spdiv'], dict['spdev'], dict['nature'], 'spd'))
     newdict['Speed'] = spdstat
 
     return newdict
@@ -296,5 +341,11 @@ def printpokemoves(pokemon):
     i = 0
     for x in pokemoveslist[pokemon]:
         print('> ' + x + '\n')
+
+pokemoveslist = {'Charizard': ['Air slash','Flamethrower','Dragon breath','Heat wave']}
+
+def removespacelower(s):
+    lowered = lowercase(s)
+    return lowered.replace(' ', '')
 
 gamestart()
