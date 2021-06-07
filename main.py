@@ -2,6 +2,7 @@ from csv_helper import *
 import time
 from pprint import pprint
 import random
+import math
 
 def lowercase(s):
     newstring = ''
@@ -65,14 +66,15 @@ def gamestart():
             chosenpokemon = spellcheck(input())
         chosenbasestats = pokemondictfinal[chosenpokemon]
         chosenbasestats['nature'] = random.choice(naturelist)
-        randomivs(chosenbasestats)
+        randomEViv(chosenbasestats)
+        chosentruestats = calctruestats(chosenbasestats)
         gamestate = True
         while gamestate == True:
             time.sleep(1)
             print('> Search\n> Pokecenter\n> End')
             gamechoice = ''
-            while gamechoice not in ['end', 'search', 'pokecenter']:
-                gamechoice = lowercase(input())
+            while gamechoice not in ['End', 'Search', 'Pokecenter', 'Pokeshop']:
+                gamechoice = spellcheck(input())
             time.sleep(1)
             if gamechoice == 'end':
                 gamestate = False
@@ -80,9 +82,23 @@ def gamestart():
                 enemypokemon = random.choice(pokemonlist)
                 enemybasestats = pokemondictfinal[enemypokemon]
                 enemybasestats['nature'] = random.choice(naturelist)
-                randomivs(enemybasestats)
+                randomEViv(enemybasestats)
+                enemytruestats = calctruestats(enemybasestats)
                 gamewait(3)
                 print("You've encountered a wild " + str(enemypokemon) + '.')
+                time.sleep(0.5)
+                print('What do you want to do?')
+                print('> Fight\n> Bag\n> Run')
+                battleoption = ''
+                while battleoption not in ['Fight', 'Bag', 'Run']:
+                    battleoption = spellcheck(input())
+                if battleoption = 'Fight':
+                    printpokemoves(chosenpokemon)
+                    chosenmove = ''
+                    while chosenmove not in pokemoveslist[chosenpokemon]:
+                        chosenmove = spellcheck(input())
+
+                print(chosentruestats, enemytruestats)
 
 
 
@@ -107,40 +123,50 @@ p1nature = 0 #Later, random number generation from 0-24 will determine natures
 p2nature = 0
 
 def hpcalc(base, IV, EV):
-    return ((((2 * base + IV + (EV / 4)) * 50) / 100) + 50 + 10) // 1
+    return math.floor(((2 * base + IV + (math.floor(EV / 4))) * 50) / 100) + 50 + 10
 
 def natmodcalc(nature, stat): #Calculates how a stat will be affected by the given nature
     if nature == 0 or nature == 6 or nature == nature == 12 or nature == 18 or nature == 24:
         return 1
     elif nature <= 4:
-        if stat == "atk":
+        if stat == 'atk':
             return 1.1
-        elif (nature == 1 and stat == "def") or (nature == 2 and stat == "spd") or (nature == 3 and stat == "spatk") or (nature == 4 and stat == "spdef"):
+        elif (nature == 1 and stat == 'def') or (nature == 2 and stat == 'spd') or (nature == 3 and stat == 'spatk') or (nature == 4 and stat == 'spdef'):
             return 0.9
+        else:
+            return 1
     elif nature == 5 or nature == 7 or nature == 8 or nature == 9:
-        if stat == "def":
+        if stat == 'def':
             return 1.1
-        elif (nature == 5 and stat == "atk") or (nature == 7 and stat == "spd") or (nature == 8 and stat == "spatk") or (nature == 9 and stat == "spdef"):
+        elif (nature == 5 and stat == 'atk') or (nature == 7 and stat == 'spd') or (nature == 8 and stat == 'spatk') or (nature == 9 and stat == 'spdef'):
             return 0.9
+        else:
+            return 1
     elif nature == 10 or nature == 11 or nature == 13 or nature == 14:
-        if stat == "spd":
+        if stat == 'spd':
             return 1.1
-        elif (nature == 10 and stat == "atk") or (nature == 11 and stat == "def") or (nature == 13 and stat == "spatk") or (nature == 14 and stat == "spdef"):
+        elif (nature == 10 and stat == 'atk') or (nature == 11 and stat == 'def') or (nature == 13 and stat == 'spatk') or (nature == 14 and stat == 'spdef'):
             return 0.9
+        else:
+            return 1
     elif nature == 15 or nature == 16 or nature == 17 or nature == 19:
-        if stat == "spatk":
+        if stat == 'spatk':
             return 1.1
-        elif (nature == 15 and stat == "atk") or (nature == 16 and stat == "def") or (nature == 17 and stat == "spd") or (nature == 19 and stat == "spdef"):
+        elif (nature == 15 and stat == 'atk') or (nature == 16 and stat == 'def') or (nature == 17 and stat == 'spd') or (nature == 19 and stat == 'spdef'):
             return 0.9
+        else:
+            return 1
     elif nature >= 20 and nature <= 23:
-        if stat == "spdef":
+        if stat == 'spdef':
             return 1.1
-        elif (nature == 21 and stat == "atk") or (nature == 22 and stat == "def") or (nature == 22 and stat == "spd") or (nature == 23 and stat == "spatk"):
+        elif (nature == 21 and stat == 'atk') or (nature == 22 and stat == 'def') or (nature == 22 and stat == 'spd') or (nature == 23 and stat == 'spatk'):
             return 0.9
+        else:
+            return 1
 
 def othercalc(base, IV, EV, nature, stat):
     nmod = natmodcalc(nature, stat)
-    return ((((2 * base + IV + (EV / 4)) * 50) / 100) + 5) * nmod
+    return math.floor((math.floor(((2 * base + IV + (math.floor(EV / 4))) * 50) / 100) + 5) * nmod)
 
 def damagecalc(attack, enemydefense, pow, critmod, atkstage, weather, movetype):
     modifier = modifiercalc(weather, movetype, attackertypes, effectiveness, burn)
@@ -212,6 +238,7 @@ def gamewait(n):
         i += 1
         time.sleep(0.8)
 
+
 def randomivs(dict):
     dict['hpiv'] = random.randint(0, 31)
     dict['atkiv'] = random.randint(0, 31)
@@ -220,9 +247,63 @@ def randomivs(dict):
     dict['spdefiv'] = random.randint(0, 31)
     dict['spdiv'] = random.randint(0, 31)
 
+def randomevs(dict):
+    evlist = ['hp', 'atk', 'def', 'spatk', 'spdef', 'spd']
+    totalev = 0
+    dict['hpev'] = 0
+    dict['atkev'] = 0
+    dict['defev'] = 0
+    dict['spatkev'] = 0
+    dict['spdefev'] = 0
+    dict['spdev'] = 0
+    while totalev <= 510:
+        currentev = random.choice(evlist)
+        if currentev == 'hp':
+            dict['hpev'] += 1
+        if currentev == 'atk':
+            dict['atkev'] += 1
+        if currentev == 'def':
+            dict['defev'] += 1
+        if currentev == 'spatk':
+            dict['spatkev'] += 1
+        if currentev == 'spdef':
+            dict['spdefev'] += 1
+        if currentev == 'spd':
+            dict['spdev'] += 1
+        totalev += 1
+
+def randomEViv(dict):
+    randomivs(dict)
+    randomevs(dict)
+
 def calctruestats(dict):
     newdict = {}
-    dict['Type 1'] = 0
-    return
+    newdict['Type 1'] = dict['Type 1']
+    newdict['Type 2'] = dict['Type 2']
+
+    hpstat = hpcalc(int(dict['HP']), dict['hpiv'], dict['hpev'])
+    newdict['HP'] = hpstat
+
+    atkstat = othercalc(int(dict['Attack']), dict['atkiv'], dict['atkev'], dict['nature'], 'atk')
+    newdict['Attack'] = atkstat
+
+    defstat = othercalc(int(dict['Defense']), dict['defiv'], dict['defev'], dict['nature'], 'def')
+    newdict['Defense'] = defstat
+
+    spatkstat = othercalc(int(dict['Sp. Atk']), dict['spatkiv'], dict['spatkev'], dict['nature'], 'spatk')
+    newdict['Sp. Atk'] = spatkstat
+
+    spdefstat = othercalc(int(dict['Sp. Def']), dict['spdefiv'], dict['spdefev'], dict['nature'], 'spdef')
+    newdict['Sp. Def'] = spdefstat
+
+    spdstat = othercalc(int(dict['Speed']), dict['spdiv'], dict['spdev'], dict['nature'], 'spd')
+    newdict['Speed'] = spdstat
+
+    return newdict
+
+def printpokemoves(pokemon):
+    i = 0
+    for x in pokemoveslist[pokemon]:
+        print('> ' + x + '\n')
 
 gamestart()
