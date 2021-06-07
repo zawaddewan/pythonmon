@@ -1,8 +1,6 @@
 from csv_helper import *
-import time
 from pprint import pprint
 import random
-import math
 
 def lowercase(s):
     newstring = ''
@@ -45,7 +43,6 @@ def makepokemonchoice(list):
 
 def gamestart():
     print(logo)
-    time.sleep(1)
     print('> Play')
     print('> Credits')
     option = ''
@@ -57,9 +54,7 @@ def gamestart():
             option = spellcheck(input())
     if option == 'Play':
         print('Welcome to the World of Pythonmon!')
-        time.sleep(1)
         print('Select your Pokemon:')
-        time.sleep(1)
         print(makepokemonchoice(pokemonlist))
         chosenpokemon = ''
         while chosenpokemon not in pokemonlist:
@@ -70,12 +65,10 @@ def gamestart():
         chosentruestats = calctruestats(chosenbasestats)
         gamestate = True
         while gamestate == True:
-            time.sleep(1)
             print('> Search\n> Pokecenter\n> End')
             gamechoice = ''
             while gamechoice not in ['End', 'Search', 'Pokecenter', 'Pokeshop']:
                 gamechoice = spellcheck(input())
-            time.sleep(1)
             if gamechoice == 'end':
                 gamestate = False
             if gamechoice == 'search':
@@ -86,7 +79,6 @@ def gamestart():
                 enemytruestats = calctruestats(enemybasestats)
                 gamewait(3)
                 print("You've encountered a wild " + str(enemypokemon) + '.')
-                time.sleep(0.5)
                 print('What do you want to do?')
                 print('> Fight\n> Bag\n> Run')
                 battleoption = ''
@@ -123,7 +115,7 @@ p1nature = 0 #Later, random number generation from 0-24 will determine natures
 p2nature = 0
 
 def hpcalc(base, IV, EV):
-    return math.floor(((2 * base + IV + (math.floor(EV / 4))) * 50) / 100) + 50 + 10
+    return (((2 * base + IV + ((EV / 4) // 1)) * 50) / 100) // 1 + 50 + 10
 
 def natmodcalc(nature, stat): #Calculates how a stat will be affected by the given nature
     if nature == 0 or nature == 6 or nature == nature == 12 or nature == 18 or nature == 24:
@@ -166,7 +158,7 @@ def natmodcalc(nature, stat): #Calculates how a stat will be affected by the giv
 
 def othercalc(base, IV, EV, nature, stat):
     nmod = natmodcalc(nature, stat)
-    return math.floor((math.floor(((2 * base + IV + (math.floor(EV / 4))) * 50) / 100) + 5) * nmod)
+    return (((((2 * base + IV + ((EV / 4) // 1)) * 50) / 100) // 1 + 5) * nmod) // 1
 
 def damagecalc(attack, enemydefense, pow, critmod, atkstage, weather, movetype):
     modifier = modifiercalc(weather, movetype, attackertypes, effectiveness, burn)
@@ -236,7 +228,6 @@ def gamewait(n):
     while i < n:
         print('.\n')
         i += 1
-        time.sleep(0.8)
 
 
 def randomivs(dict):
