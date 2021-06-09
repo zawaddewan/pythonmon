@@ -33,16 +33,6 @@ def spellcheck(s):
 logofile = open('logo2.txt')
 logo = logofile.read()
 
-pokemonlist = ['Charizard', 'Greninja', 'Raichu', 'Lucario', 'Empoleon']
-
-def makepokemonchoice(list):
-    i = 0
-    string = ''
-    while i < len(list):
-        string += '> ' + list[i] + '\n'
-        i += 1
-    return string
-
 def gamestart():
     #Starting menu
     print(logo)
@@ -62,9 +52,9 @@ def gamestart():
         time.sleep(1)
         print('Select your Pokemon:')
         time.sleep(1)
-        print(makepokemonchoice(pokemonlist))
+        printpoke()
         chosenpokemon = ''
-        while chosenpokemon not in pokemonlist:
+        while chosenpokemon not in pokemoveslist.keys():
             chosenpokemon = spellcheck(input())
         chosenbasestats = pokemondictfinal[chosenpokemon]
         chosenbasestats['nature'] = random.choice(naturelist)
@@ -183,6 +173,7 @@ def gamestart():
                     time.sleep(0.5)
                     printpokemoves(chosenpokemon)
                     chosenmove = ''
+                    #Choosing pokemon move and calculating damage
                     while chosenmove not in pokemoveslist[chosenpokemon]:
                         chosenmove = spellcheck(input())
                     chosenmovefinder = movesdictfinal[removespacelower(chosenmove)] #Gives data for chosenmove
@@ -191,12 +182,20 @@ def gamestart():
                     enemytypes = [chosentruestats['Type 1'], chosentruestats['Type 2']]
                     if chosenmovefinder['damage_class_id'] == 2:
                         chosenburn = burnmodcalc(chosentruestats['nonvolatile'])
-                        chosendamage = damagecalc(chosentruestats['Attack'], enemytruestats['Defense'], chosenmovefinder['power'], chosentruestats['atkstage'], weather, chosenburn, chosenmovetype, chosentypes, enemytypes)
+                        chosendamage = damagecalc(chosentruestats['Attack'], enemytruestats['Defense'], chosenmovefinder['power'], chosentruestats['atkstage'], enemytruestats['defstage'],weather, chosenburn, chosenmovetype, chosentypes, enemytypes)
                     if chosenmovefinder['damage_class_id'] == 3:
                         chosenburn = 1
-                        chosendamage = damagecalc(chosentruestats['Sp. Atk'], enemytruestats['Sp. Def'], chosenmovefinder['power'], chosentruestats['spatkstage'], weather, chosenburn, chosenmovetype, chosentypes, enemytypes)
-
-
+                        chosendamage = damagecalc(chosentruestats['Sp. Atk'], enemytruestats['Sp. Def'], chosenmovefinder['power'], chosentruestats['spatkstage'], enemytruestats['spdefstage'], weather, chosenburn, chosenmovetype, chosentypes, enemytypes)
+                    #Choosing enemy pokemon move and calculating damage
+                    enemymove = random.choice(pokemoveslist[enemypokemon])
+                    enemymovefinder = movesdictfinal[removespacelower(enemymove)]
+                    enemymovetype = typeidtotype(enemymovefinder['type_id'])
+                    if enemymovefinder['damage_class_id'] == 2:
+                        enemyburn = burnmodcalc(enemytruestats['nonvolatile'])
+                        enemydamage = damagecalc(enemytruestats['Attack'], enemytruestats['Defense'], enemymovefinder['power'], enemytruestats['atkstage'], chosentruestats['defstage'], weather, enemyburn, enemymovetype, enemytypes, chosentypes)
+                    if enemymovefinder['damage_class_id'] == 3:
+                        enemyburn = 1
+                        enemydamage = damagecalc(enemytruestats['Sp. Atk'], chosentruestats['Sp. Def'], enemymovefinder['power'], enemytruestats['spatkstage'], chosentruestats['spdefstage'], weather, enemyburn, enemymovetype, enemytypes, chosentypes)
 
 movesfile = open('moves.csv')
 moves = movesfile.read()
@@ -264,7 +263,7 @@ def othercalc(base, IV, EV, nature, stat):
     nmod = natmodcalc(nature, stat)
     return (((((2 * base + IV + ((EV / 4) // 1)) * 50) / 100) // 1 + 5) * nmod) // 1
 
-def damagecalc(attack, enemydefense, pow, atkstage, weather, burn, movetype, attackertypes, defendertypes):
+def damagecalc(attack, enemydefense, pow, atkstage, enemydefstage, weather, burn, movetype, attackertypes, defendertypes):
     effectiveness = calcEffectiveness(movetype, defendertypes[0], defendertypes[1])
     modifier = modifiercalc(weather, movetype, attackertypes, effectiveness, burn)
     damage = (((((((2 * 50) / 5) + 2) * pow * (attack * (1 + (atkstage / 2)))) / enemydefense ) / 50) + 2) * modifier
@@ -421,6 +420,12 @@ def calctruestats(dict):
 
     return newdict
 
+def printpoke():
+    string = ''
+    for keys in pokemoveslist.keys():
+        string += '> ' + keys + '\n'
+    print(string)
+
 def printpokemoves(pokemon):
     string = ''
     for x in pokemoveslist[pokemon]:
@@ -431,11 +436,27 @@ pokemoveslist = {'Charizard': ['Air slash','Flamethrower','Dragon breath','Heat 
 'Greninja': ['Surf','Ice beam','Water shuriken','Dark pulse'],
 'Raichu': ['Thunderbolt','Swift','Electro ball','Thunder wave'],
 'Lucario': ['Aura sphere','Close combat','Meteor mash','Thunder punch'],
-'Empoleon': ['Ice beam','Surf','Flash cannon','Hydro pump']}
+'Empoleon': ['Ice beam','Surf','Flash cannon','Hydro pump'],
+'Gyarados': ['Waterfall','Thrash','Crunch','Outrage'],
+'Smeargle': ['Sketch','Sketch','Sketch','Sketch'],
+'Steelix': ['Crunch','Earthquake','Iron head','Stone edge'],
+'Ho-oh': ['Sacred fire','Shadow ball','Earth power','Thunderbolt'],
+'Talonflame': ['Acrobatics','Brave bird','Flare blitz','Swords dance'],
+'Probopass': ['Stone edge','Thunderbolt','Thunder wave','Flash cannon'],
+'Genesect': ['X-scissor','Bug buzz','Thunderbolt','Shadow claw'],
+'Blissey': ['Double-edge','Thunder punch','Sing','Soft-boiled'],
+'Crobat': ['Acrobatics','Cross poison','Zen headbutt','Confuse ray'],
+'Golurk': ['Earthquake','Hammer arm','Shadow ball','Shadow punch'],
+'Shiftry': ['Leaf blade','Throat chop','X-scissor','Swords dance'],
+'Pinsir': ['X-scissor','Swords dance','Guillotine','Close combat'],
+'Ampharos': ['Thunderbolt','Dragon pulse','Signal beam','Zap cannon'],
+'Bidoof': ['Swords dance','Super fang','Crunch','Hyper fang'],
+'Clawitzer': ['Aura sphere','Surf','Flash cannon','Sludge wave']}
 
 def removespacelower(s):
     lowered = lowercase(s)
     fixed = lowered.replace(' ', '')
+    fixed = fixed.replace('-', '')
     return fixed
 
 gamestart()
