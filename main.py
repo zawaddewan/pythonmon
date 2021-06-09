@@ -17,7 +17,7 @@ def lowercase(s):
 
 def forceupper(s):
     newstring = ''
-    if s[0] > 'a' and s[0] < 'z':
+    if s[0] >= 'a' and s[0] <= 'z':
         newstring += chr(ord(s[0]) - 32)
     else:
         newstring += s[0]
@@ -65,25 +65,31 @@ def gamestart():
         print(makepokemonchoice(pokemonlist))
         chosenpokemon = ''
         while chosenpokemon not in pokemonlist:
-            #chosenpokemon = spellcheck(input()) (TESTING)
-            chosenpokemon = 'Charizard'
+            chosenpokemon = spellcheck(input())
         chosenbasestats = pokemondictfinal[chosenpokemon]
         chosenbasestats['nature'] = random.choice(naturelist)
         randomEViv(chosenbasestats)
         chosentruestats = calctruestats(chosenbasestats)
         giveothervalues(chosentruestats)
+        bag = {'Pokedollars': 500, 'Potions': 0, 'Super potions': 0, 'Hyper potions': 0}
         gamestate = True
         #Starts the game
         while gamestate == True:
             time.sleep(1)
-            print('> Search\n> Pokecenter\n> Pokeshop\n> End')
+            print('> Search\n> View bag\n> Pokecenter\n> Pokeshop\n> End')
             gamechoice = ''
-            while gamechoice not in ['End', 'Search', 'Pokecenter', 'Pokeshop']:
+            while gamechoice not in ['End', 'Search', 'Pokecenter', 'Pokeshop', 'View bag']:
                 gamechoice = spellcheck(input())
             time.sleep(1)
 
             if gamechoice == 'End': #Ends the game
                 gamestate = False
+
+            if gamechoice == 'View bag':
+                print('Pokedollars' + ': ' + str(bag['Pokedollars']))
+                print('Potions' + ': ' + str(bag['Potions']))
+                print('Super potions' + ': ' + str(bag['Super potions']))
+                print('Hyper potions' + ': ' + str(bag['Hyper potions']))
 
             if gamechoice == 'Pokecenter': #Pokecenter option
                 gamewait(1)
@@ -97,6 +103,65 @@ def gamestart():
                         gamewait(4)
                         chosentruestats['HP'] = chosentruestats['MAXHP']
                         print('Your pokemon has been healed.')
+
+            if gamechoice == 'Pokeshop':
+                gamewait(1)
+                print('What would you like to buy?')
+                pokeshopoption = ''
+                while pokeshopoption != 'Leave':
+                    time.sleep(0.5)
+                    print('> Potion\n> Super potion\n> Hyper potion\n> Leave')
+                    pokeshopoption = spellcheck(input())
+                    price = 0
+                    purchase = 0.1
+                    if pokeshopoption == 'Potion':
+                        time.sleep(0.5)
+                        print('Potions restore 20 HP.')
+                        print('How many would you like to buy?')
+                        while isinstance(purchase, int) != True:
+                            try:
+                                purchase = int(input())
+                            except:
+                                print('That is not a valid number.')
+                        if purchase > 0:
+                            price = purchase*100
+                            if bag['Pokedollars'] < price:
+                                print('You do not have enough pokedollars to purchase the item.')
+                            else:
+                                bag['Pokedollars'] -= price
+                                bag['Potions'] += purchase
+                    if pokeshopoption == 'Super potion':
+                        time.sleep(0.5)
+                        print('Super potions restore 60 HP.')
+                        print('How many would you like to buy?')
+                        while isinstance(purchase, int) != True:
+                            try:
+                                purchase = int(input())
+                            except:
+                                print('That is not a valid number.')
+                        if purchase > 0:
+                            price = purchase*250
+                            if bag['Pokedollars'] < price:
+                                print('You do not have enough pokedollars to purchase the item.')
+                            else:
+                                bag['Pokedollars'] -= price
+                                bag['Super potions'] += purchase
+                    if pokeshopoption == 'Hyper potion':
+                        time.sleep(0.5)
+                        print('Hyper potions restore 120 HP.')
+                        print('How many would you like to buy?')
+                        while isinstance(purchase, int) != True:
+                            try:
+                                purchase = int(input())
+                            except:
+                                print('That is not a valid number.')
+                        if purchase > 0:
+                            price = purchase*400
+                            if bag['Pokedollars'] < price:
+                                print('You do not have enough pokedollars to purchase the item.')
+                            else:
+                                bag['Pokedollars'] -= price
+                                bag['Hyper Potions'] += purchase
 
             if gamechoice == 'Search': #Searchs for pokemon
                 weather = 'None' #Resets weather
@@ -357,14 +422,20 @@ def calctruestats(dict):
     return newdict
 
 def printpokemoves(pokemon):
-    i = 0
+    string = ''
     for x in pokemoveslist[pokemon]:
-        print('> ' + x + '\n')
+        string += '> ' + x + '\n'
+    print(string)
 
-pokemoveslist = {'Charizard': ['Air slash','Flamethrower','Dragon breath','Heat wave']}
+pokemoveslist = {'Charizard': ['Air slash','Flamethrower','Dragon breath','Heat wave'],
+'Greninja': ['Surf','Ice beam','Water shuriken','Dark pulse'],
+'Raichu': ['Thunderbolt','Swift','Electro ball','Thunder wave'],
+'Lucario': ['Aura sphere','Close combat','Meteor mash','Thunder punch'],
+'Empoleon': ['Ice beam','Surf','Flash cannon','Hydro pump']}
 
 def removespacelower(s):
     lowered = lowercase(s)
-    return lowered.replace(' ', '')
+    fixed = lowered.replace(' ', '')
+    return fixed
 
 gamestart()
