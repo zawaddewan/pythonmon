@@ -83,15 +83,27 @@ def gamewait(n):
 
 def printpoke():
     string = ''
+    i = 1
     for keys in pokemoveslist.keys():
-        string += '> ' + keys + '\n'
+        string += str(i) + '. ' + keys + '\n'
+        i += 1
     print(string)
 
 def printpokemoves(pokemon):
     string = ''
+    i = 1
     for x in pokemoveslist[pokemon]:
-        string += '> ' + x + '\n'
+        string += str(i) + '. ' + x + '\n'
+        i += 1
     print(string)
+
+def effectivenessmessage(effectiveness):
+    if effectiveness == 0:
+        print('It was not effective...')
+    if effectiveness > 1:
+        print('It was super effective!')
+    if effectiveness < 1:
+        print('It was not very effective...')
 
 
 def removespacelower(s):

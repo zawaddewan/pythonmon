@@ -1,261 +1,261 @@
 def calcEffectiveness(atktype, enemytype1, enemytype2):
     effectiveness = 1
-    if atktype == 'normal':
-        if (enemytype1 == 'rock') or (enemytype2 == 'rock'):
+    if atktype == 'Normal':
+        if (enemytype1 == 'Rock') or (enemytype2 == 'Rock'):
             effectiveness *= 0.5
-        if (enemytype1 == 'ghost') or (enemytype2 == 'ghost'):
+        if (enemytype1 == 'Ghost') or (enemytype2 == 'Ghost'):
             effectiveness *= 0
-        if (enemytype1 == 'steel') or (enemytype2 == 'steel'):
+        if (enemytype1 == 'Steel') or (enemytype2 == 'Steel'):
             effectiveness *= 0.5
-    if atktype == 'fire':
-        if (enemytype1 == 'fire') or (enemytype2 == 'fire'):
+    if atktype == 'Fire':
+        if (enemytype1 == 'Fire') or (enemytype2 == 'Fire'):
             effectiveness *= 0.5
-        if (enemytype1 == 'water') or (enemytype2 == 'water'):
+        if (enemytype1 == 'Water') or (enemytype2 == 'Water'):
             effectiveness *= 0.5
-        if (enemytype1 == 'grass') or (enemytype2 == 'grass'):
+        if (enemytype1 == 'Grass') or (enemytype2 == 'Grass'):
             effectiveness *= 2
-        if (enemytype1 == 'ice') or (enemytype2 == 'ice'):
+        if (enemytype1 == 'Ice') or (enemytype2 == 'Ice'):
             effectiveness *= 2
-        if (enemytype1 == 'bug') or (enemytype2 == 'bug'):
+        if (enemytype1 == 'Bug') or (enemytype2 == 'Bug'):
             effectiveness *= 2
-        if (enemytype1 == 'rock') or (enemytype2 == 'rock'):
+        if (enemytype1 == 'Rock') or (enemytype2 == 'Rock'):
             effectiveness *= 0.5
-        if (enemytype1 == 'dragon') or (enemytype2 == 'dragon'):
+        if (enemytype1 == 'Dragon') or (enemytype2 == 'Dragon'):
             effectiveness *= 0.5
-        if (enemytype1 == 'steel') or (enemytype2 == 'steel'):
+        if (enemytype1 == 'Steel') or (enemytype2 == 'Steel'):
             effectiveness *= 2
-    if atktype == 'water':
-        if (enemytype1 == 'fire') or (enemytype2 == 'fire'):
+    if atktype == 'Water':
+        if (enemytype1 == 'Fire') or (enemytype2 == 'Fire'):
             effectiveness *= 2
-        if (enemytype1 == 'water') or (enemytype2 == 'water'):
+        if (enemytype1 == 'Water') or (enemytype2 == 'Water'):
             effectiveness *= 0.5
-        if (enemytype1 == 'grass') or (enemytype2 == 'grass'):
+        if (enemytype1 == 'Grass') or (enemytype2 == 'Grass'):
             effectiveness *= 0.5
-        if (enemytype1 == 'ground') or (enemytype2 == 'ground'):
+        if (enemytype1 == 'Ground') or (enemytype2 == 'Ground'):
             effectiveness *= 2
-        if (enemytype1 == 'rock') or (enemytype2 == 'rock'):
+        if (enemytype1 == 'Rock') or (enemytype2 == 'Rock'):
             effectiveness *= 2
-        if (enemytype1 == 'dragon') or (enemytype2 == 'dragon'):
+        if (enemytype1 == 'Dragon') or (enemytype2 == 'Dragon'):
             effectiveness *= 0.5
-    if atktype == 'electric':
-        if (enemytype1 == 'water') or (enemytype2 == 'water'):
+    if atktype == 'Electric':
+        if (enemytype1 == 'Water') or (enemytype2 == 'Water'):
             effectiveness *= 2
-        if (enemytype1 == 'electric') or (enemytype2 == 'electric'):
+        if (enemytype1 == 'Electric') or (enemytype2 == 'Electric'):
             effectiveness *= 0.5
-        if (enemytype1 == 'grass') or (enemytype2 == 'grass'):
+        if (enemytype1 == 'Grass') or (enemytype2 == 'Grass'):
             effectiveness *= 0.5
-        if (enemytype1 == 'ground') or (enemytype2 == 'ground'):
+        if (enemytype1 == 'Ground') or (enemytype2 == 'Ground'):
             effectiveness *= 0
-        if (enemytype1 == 'flying') or (enemytype2 == 'flying'):
+        if (enemytype1 == 'Flying') or (enemytype2 == 'Flying'):
             effectiveness *= 2
-        if (enemytype1 == 'dragon') or (enemytype2 == 'dragon'):
+        if (enemytype1 == 'Dragon') or (enemytype2 == 'Dragon'):
             effectiveness *= 0.5
-    if atktype == 'grass':
-        if (enemytype1 == 'fire') or (enemytype2 == 'fire'):
+    if atktype == 'Grass':
+        if (enemytype1 == 'Fire') or (enemytype2 == 'Fire'):
             effectiveness *= 0.5
-        if (enemytype1 == 'water') or (enemytype2 == 'water'):
+        if (enemytype1 == 'Water') or (enemytype2 == 'Water'):
             effectiveness *= 2
-        if (enemytype1 == 'grass') or (enemytype2 == 'grass'):
+        if (enemytype1 == 'Grass') or (enemytype2 == 'Grass'):
             effectiveness *= 0.5
-        if (enemytype1 == 'poison') or (enemytype2 == 'poison'):
+        if (enemytype1 == 'Poison') or (enemytype2 == 'Poison'):
             effectiveness *= 0.5
-        if (enemytype1 == 'ground') or (enemytype2 == 'ground'):
+        if (enemytype1 == 'Ground') or (enemytype2 == 'Ground'):
             effectiveness *= 2
-        if (enemytype1 == 'flying') or (enemytype2 == 'flying'):
+        if (enemytype1 == 'Flying') or (enemytype2 == 'Flying'):
             effectiveness *= 0.5
-        if (enemytype1 == 'bug') or (enemytype2 == 'bug'):
+        if (enemytype1 == 'Bug') or (enemytype2 == 'Bug'):
             effectiveness *= 0.5
-        if (enemytype1 == 'rock') or (enemytype2 == 'rock'):
+        if (enemytype1 == 'Rock') or (enemytype2 == 'Rock'):
             effectiveness *= 2
-        if (enemytype1 == 'dragon') or (enemytype2 == 'dragon'):
+        if (enemytype1 == 'Dragon') or (enemytype2 == 'Dragon'):
             effectiveness *= 0.5
-        if (enemytype1 == 'steel') or (enemytype2 == 'steel'):
+        if (enemytype1 == 'Steel') or (enemytype2 == 'Steel'):
             effectiveness *= 0.5
-    if atktype == 'ice':
-        if (enemytype1 == 'fire') or (enemytype2 == 'fire'):
+    if atktype == 'Ice':
+        if (enemytype1 == 'Fire') or (enemytype2 == 'Fire'):
             effectiveness *= 0.5
-        if (enemytype1 == 'water') or (enemytype2 == 'water'):
+        if (enemytype1 == 'Water') or (enemytype2 == 'Water'):
             effectiveness *= 0.5
-        if (enemytype1 == 'grass') or (enemytype2 == 'grass'):
+        if (enemytype1 == 'Grass') or (enemytype2 == 'Grass'):
             effectiveness *= 2
-        if (enemytype1 == 'ice') or (enemytype2 == 'ice'):
+        if (enemytype1 == 'Ice') or (enemytype2 == 'Ice'):
             effectiveness *= 0.5
-        if (enemytype1 == 'ground') or (enemytype2 == 'ground'):
+        if (enemytype1 == 'Ground') or (enemytype2 == 'Ground'):
             effectiveness *= 2
-        if (enemytype1 == 'flying') or (enemytype2 == 'flying'):
+        if (enemytype1 == 'Flying') or (enemytype2 == 'Flying'):
             effectiveness *= 2
-        if (enemytype1 == 'dragon') or (enemytype2 == 'dragon'):
+        if (enemytype1 == 'Dragon') or (enemytype2 == 'Dragon'):
             effectiveness *= 2
-        if (enemytype1 == 'steel') or (enemytype2 == 'steel'):
+        if (enemytype1 == 'Steel') or (enemytype2 == 'Steel'):
             effectiveness *= 0.5
-    if atktype == 'fighting':
-        if (enemytype1 == 'normal') or (enemytype2 == 'normal'):
+    if atktype == 'Fighting':
+        if (enemytype1 == 'Normal') or (enemytype2 == 'Normal'):
             effectiveness *= 2
-        if (enemytype1 == 'ice') or (enemytype2 == 'ice'):
+        if (enemytype1 == 'Ice') or (enemytype2 == 'Ice'):
             effectiveness *= 2
-        if (enemytype1 == 'poison') or (enemytype2 == 'poison'):
+        if (enemytype1 == 'Poison') or (enemytype2 == 'Poison'):
             effectiveness *= 0.5
-        if (enemytype1 == 'flying') or (enemytype2 == 'flying'):
+        if (enemytype1 == 'Flying') or (enemytype2 == 'Flying'):
             effectiveness *= 0.5
-        if (enemytype1 == 'psychic') or (enemytype2 == 'psychic'):
+        if (enemytype1 == 'Psychic') or (enemytype2 == 'Psychic'):
             effectiveness *= 0.5
-        if (enemytype1 == 'bug') or (enemytype2 == 'bug'):
+        if (enemytype1 == 'Bug') or (enemytype2 == 'Bug'):
             effectiveness *= 0.5
-        if (enemytype1 == 'rock') or (enemytype2 == 'rock'):
+        if (enemytype1 == 'Rock') or (enemytype2 == 'Rock'):
             effectiveness *= 2
-        if (enemytype1 == 'ghost') or (enemytype2 == 'ghost'):
+        if (enemytype1 == 'Ghost') or (enemytype2 == 'Ghost'):
             effectiveness *= 0
-        if (enemytype1 == 'dark') or (enemytype2 == 'dark'):
+        if (enemytype1 == 'Dark') or (enemytype2 == 'Dark'):
             effectiveness *= 2
-        if (enemytype1 == 'steel') or (enemytype2 == 'steel'):
+        if (enemytype1 == 'Steel') or (enemytype2 == 'Steel'):
             effectiveness *= 2
-        if (enemytype1 == 'fairy') or (enemytype2 == 'fairy'):
+        if (enemytype1 == 'Fairy') or (enemytype2 == 'Fairy'):
             effectiveness *= 0.5
-    if atktype == 'poison':
-        if (enemytype1 == 'grass') or (enemytype2 == 'grass'):
+    if atktype == 'Poison':
+        if (enemytype1 == 'Grass') or (enemytype2 == 'Grass'):
             effectiveness *= 2
-        if (enemytype1 == 'poison') or (enemytype2 == 'poison'):
+        if (enemytype1 == 'Poison') or (enemytype2 == 'Poison'):
             effectiveness *= 0.5
-        if (enemytype1 == 'ground') or (enemytype2 == 'ground'):
+        if (enemytype1 == 'Ground') or (enemytype2 == 'Ground'):
             effectiveness *= 0.5
-        if (enemytype1 == 'rock') or (enemytype2 == 'rock'):
+        if (enemytype1 == 'Rock') or (enemytype2 == 'Rock'):
             effectiveness *= 0.5
-        if (enemytype1 == 'ghost') or (enemytype2 == 'ghost'):
+        if (enemytype1 == 'Ghost') or (enemytype2 == 'Ghost'):
             effectiveness *= 0.5
-        if (enemytype1 == 'steel') or (enemytype2 == 'steel'):
+        if (enemytype1 == 'Steel') or (enemytype2 == 'Steel'):
             effectiveness *= 0
-        if (enemytype1 == 'fairy') or (enemytype2 == 'fairy'):
+        if (enemytype1 == 'Fairy') or (enemytype2 == 'Fairy'):
             effectiveness *= 2
-    if atktype == 'ground':
-        if (enemytype1 == 'fire') or (enemytype2 == 'fire'):
+    if atktype == 'Ground':
+        if (enemytype1 == 'Fire') or (enemytype2 == 'Fire'):
             effectiveness *= 2
-        if (enemytype1 == 'electric') or (enemytype2 == 'electric'):
+        if (enemytype1 == 'Electric') or (enemytype2 == 'Electric'):
             effectiveness *= 2
-        if (enemytype1 == 'grass') or (enemytype2 == 'grass'):
+        if (enemytype1 == 'Grass') or (enemytype2 == 'Grass'):
             effectiveness *= 0.5
-        if (enemytype1 == 'poison') or (enemytype2 == 'poison'):
+        if (enemytype1 == 'Poison') or (enemytype2 == 'Poison'):
             effectiveness *= 2
-        if (enemytype1 == 'flying') or (enemytype2 == 'flying'):
+        if (enemytype1 == 'Flying') or (enemytype2 == 'Flying'):
             effectiveness *= 0
-        if (enemytype1 == 'bug') or (enemytype2 == 'bug'):
+        if (enemytype1 == 'Bug') or (enemytype2 == 'Bug'):
             effectiveness *= 0.5
-        if (enemytype1 == 'rock') or (enemytype2 == 'rock'):
+        if (enemytype1 == 'Rock') or (enemytype2 == 'Rock'):
             effectiveness *= 2
-        if (enemytype1 == 'steel') or (enemytype2 == 'steel'):
+        if (enemytype1 == 'Steel') or (enemytype2 == 'Steel'):
             effectiveness *= 2
-    if atktype == 'flying':
-        if (enemytype1 == 'electric') or (enemytype2 == 'electric'):
+    if atktype == 'Flying':
+        if (enemytype1 == 'Electric') or (enemytype2 == 'Electric'):
             effectiveness *= 0.5
-        if (enemytype1 == 'grass') or (enemytype2 == 'grass'):
+        if (enemytype1 == 'Grass') or (enemytype2 == 'Grass'):
             effectiveness *= 2
-        if (enemytype1 == 'fighting') or (enemytype2 == 'fighting'):
+        if (enemytype1 == 'Fighting') or (enemytype2 == 'Fighting'):
             effectiveness *= 2
-        if (enemytype1 == 'bug') or (enemytype2 == 'bug'):
+        if (enemytype1 == 'Bug') or (enemytype2 == 'Bug'):
             effectiveness *= 2
-        if (enemytype1 == 'rock') or (enemytype2 == 'rock'):
+        if (enemytype1 == 'Rock') or (enemytype2 == 'Rock'):
             effectiveness *= 0.5
-        if (enemytype1 == 'steel') or (enemytype2 == 'steel'):
+        if (enemytype1 == 'Steel') or (enemytype2 == 'Steel'):
             effectiveness *= 0.5
-    if atktype == 'psychic':
-        if (enemytype1 == 'fighting') or (enemytype2 == 'fighting'):
+    if atktype == 'Psychic':
+        if (enemytype1 == 'Fighting') or (enemytype2 == 'Fighting'):
             effectiveness *= 2
-        if (enemytype1 == 'poison') or (enemytype2 == 'poison'):
+        if (enemytype1 == 'Poison') or (enemytype2 == 'Poison'):
             effectiveness *= 2
-        if (enemytype1 == 'psychic') or (enemytype2 == 'psychic'):
+        if (enemytype1 == 'Psychic') or (enemytype2 == 'Psychic'):
             effectiveness *= 0.5
-        if (enemytype1 == 'dark') or (enemytype2 == 'dark'):
+        if (enemytype1 == 'Dark') or (enemytype2 == 'Dark'):
             effectiveness *= 0
-        if (enemytype1 == 'steel') or (enemytype2 == 'steel'):
+        if (enemytype1 == 'Steel') or (enemytype2 == 'Steel'):
             effectiveness *= 0.5
-    if atktype == 'bug':
-        if (enemytype1 == 'fire') or (enemytype2 == 'fire'):
+    if atktype == 'Bug':
+        if (enemytype1 == 'Fire') or (enemytype2 == 'Fire'):
             effectiveness *= 0.5
-        if (enemytype1 == 'grass') or (enemytype2 == 'grass'):
+        if (enemytype1 == 'Grass') or (enemytype2 == 'Grass'):
             effectiveness *= 2
-        if (enemytype1 == 'fighting') or (enemytype2 == 'fighting'):
+        if (enemytype1 == 'Fighting') or (enemytype2 == 'Fighting'):
             effectiveness *= 0.5
-        if (enemytype1 == 'poison') or (enemytype2 == 'poison'):
+        if (enemytype1 == 'Poison') or (enemytype2 == 'Poison'):
             effectiveness *= 0.5
-        if (enemytype1 == 'flying') or (enemytype2 == 'flying'):
+        if (enemytype1 == 'Flying') or (enemytype2 == 'Flying'):
             effectiveness *= 0.5
-        if (enemytype1 == 'psychic') or (enemytype2 == 'psychic'):
+        if (enemytype1 == 'Psychic') or (enemytype2 == 'Psychic'):
             effectiveness *= 2
-        if (enemytype1 == 'ghost') or (enemytype2 == 'ghost'):
+        if (enemytype1 == 'Ghost') or (enemytype2 == 'Ghost'):
             effectiveness *= 0.5
-        if (enemytype1 == 'dragon') or (enemytype2 == 'dragon'):
+        if (enemytype1 == 'Dragon') or (enemytype2 == 'Dragon'):
             effectiveness *= 2
-        if (enemytype1 == 'steel') or (enemytype2 == 'steel'):
+        if (enemytype1 == 'Steel') or (enemytype2 == 'Steel'):
             effectiveness *= 0.5
-        if (enemytype1 == 'fairy') or (enemytype2 == 'fairy'):
+        if (enemytype1 == 'Fairy') or (enemytype2 == 'Fairy'):
             effectiveness *= 0.5
-    if atktype == 'rock':
-        if (enemytype1 == 'fire') or (enemytype2 == 'fire'):
+    if atktype == 'Rock':
+        if (enemytype1 == 'Fire') or (enemytype2 == 'Fire'):
             effectiveness *= 2
-        if (enemytype1 == 'ice') or (enemytype2 == 'ice'):
+        if (enemytype1 == 'Ice') or (enemytype2 == 'Ice'):
             effectiveness *= 2
-        if (enemytype1 == 'fighting') or (enemytype2 == 'fighting'):
+        if (enemytype1 == 'Fighting') or (enemytype2 == 'Fighting'):
             effectiveness *= 0.5
-        if (enemytype1 == 'ground') or (enemytype2 == 'ground'):
+        if (enemytype1 == 'Ground') or (enemytype2 == 'Ground'):
             effectiveness *= 0.5
-        if (enemytype1 == 'flying') or (enemytype2 == 'flying'):
+        if (enemytype1 == 'Flying') or (enemytype2 == 'Flying'):
             effectiveness *= 2
-        if (enemytype1 == 'bug') or (enemytype2 == 'bug'):
+        if (enemytype1 == 'Bug') or (enemytype2 == 'Bug'):
             effectiveness *= 2
-        if (enemytype1 == 'steel') or (enemytype2 == 'steel'):
+        if (enemytype1 == 'Steel') or (enemytype2 == 'Steel'):
             effectiveness *= 0.5
-    if atktype == 'ghost':
-        if (enemytype1 == 'normal') or (enemytype2 == 'normal'):
+    if atktype == 'Ghost':
+        if (enemytype1 == 'Normal') or (enemytype2 == 'Normal'):
             effectiveness *= 0
-        if (enemytype1 == 'psychic') or (enemytype2 == 'psychic'):
+        if (enemytype1 == 'Psychic') or (enemytype2 == 'Psychic'):
             effectiveness *= 2
-        if (enemytype1 == 'ghost') or (enemytype2 == 'ghost'):
+        if (enemytype1 == 'Ghost') or (enemytype2 == 'Ghost'):
             effectiveness *= 2
-        if (enemytype1 == 'dark') or (enemytype2 == 'dark'):
+        if (enemytype1 == 'Dark') or (enemytype2 == 'Dark'):
             effectiveness *= 0.5
-    if atktype == 'dragon':
-        if (enemytype1 == 'dragon') or (enemytype2 == 'dragon'):
+    if atktype == 'Dragon':
+        if (enemytype1 == 'Dragon') or (enemytype2 == 'Dragon'):
             effectiveness *= 2
-        if (enemytype1 == 'steel') or (enemytype2 == 'steel'):
+        if (enemytype1 == 'Steel') or (enemytype2 == 'Steel'):
             effectiveness *= 0.5
-        if (enemytype1 == 'fairy') or (enemytype2 == 'fairy'):
+        if (enemytype1 == 'Fairy') or (enemytype2 == 'Fairy'):
             effectiveness *= 0
-    if atktype == 'dark':
-        if (enemytype1 == 'fighting') or (enemytype2 == 'fighting'):
+    if atktype == 'Dark':
+        if (enemytype1 == 'Fighting') or (enemytype2 == 'Fighting'):
             effectiveness *= 0.5
-        if (enemytype1 == 'psychic') or (enemytype2 == 'psychic'):
+        if (enemytype1 == 'Psychic') or (enemytype2 == 'Psychic'):
             effectiveness *= 2
-        if (enemytype1 == 'ghost') or (enemytype2 == 'ghost'):
+        if (enemytype1 == 'Ghost') or (enemytype2 == 'Ghost'):
             effectiveness *= 2
-        if (enemytype1 == 'dark') or (enemytype2 == 'dark'):
+        if (enemytype1 == 'Dark') or (enemytype2 == 'Dark'):
             effectiveness *= 0.5
-        if (enemytype1 == 'fairy') or (enemytype2 == 'fairy'):
+        if (enemytype1 == 'Fairy') or (enemytype2 == 'Fairy'):
             effectiveness *= 0.5
-    if atktype == 'steel':
-        if (enemytype1 == 'fire') or (enemytype2 == 'fire'):
+    if atktype == 'Steel':
+        if (enemytype1 == 'Fire') or (enemytype2 == 'Fire'):
             effectiveness *= 0.5
-        if (enemytype1 == 'water') or (enemytype2 == 'water'):
+        if (enemytype1 == 'Water') or (enemytype2 == 'Water'):
             effectiveness *= 0.5
-        if (enemytype1 == 'electric') or (enemytype2 == 'electric'):
+        if (enemytype1 == 'Electric') or (enemytype2 == 'Electric'):
             effectiveness *= 0.5
-        if (enemytype1 == 'ice') or (enemytype2 == 'ice'):
+        if (enemytype1 == 'Ice') or (enemytype2 == 'Ice'):
             effectiveness *= 2
-        if (enemytype1 == 'rock') or (enemytype2 == 'rock'):
+        if (enemytype1 == 'Rock') or (enemytype2 == 'Rock'):
             effectiveness *= 2
-        if (enemytype1 == 'steel') or (enemytype2 == 'steel'):
+        if (enemytype1 == 'Steel') or (enemytype2 == 'Steel'):
             effectiveness *= 0.5
-        if (enemytype1 == 'fairy') or (enemytype2 == 'fairy'):
+        if (enemytype1 == 'Fairy') or (enemytype2 == 'Fairy'):
             effectiveness *= 2
-    if atktype == 'fairy':
-        if (enemytype1 == 'fire') or (enemytype2 == 'fire'):
+    if atktype == 'Fairy':
+        if (enemytype1 == 'Fire') or (enemytype2 == 'Fire'):
             effectiveness *= 0.5
-        if (enemytype1 == 'fighting') or (enemytype2 == 'fighting'):
+        if (enemytype1 == 'Fighting') or (enemytype2 == 'Fighting'):
             effectiveness *= 2
-        if (enemytype1 == 'poison') or (enemytype2 == 'poison'):
+        if (enemytype1 == 'Poison') or (enemytype2 == 'Poison'):
             effectiveness *= 0.5
-        if (enemytype1 == 'dragon') or (enemytype2 == 'dragon'):
+        if (enemytype1 == 'Dragon') or (enemytype2 == 'Dragon'):
             effectiveness *= 2
-        if (enemytype1 == 'dark') or (enemytype2 == 'dark'):
+        if (enemytype1 == 'Dark') or (enemytype2 == 'Dark'):
             effectiveness *= 2
-        if (enemytype1 == 'steel') or (enemytype2 == 'steel'):
+        if (enemytype1 == 'Steel') or (enemytype2 == 'Steel'):
             effectiveness *= 0.5
     return effectiveness

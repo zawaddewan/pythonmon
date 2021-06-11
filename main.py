@@ -10,16 +10,16 @@ def gamestart():
     #Starting menu
     print(logo)
     time.sleep(1)
-    print('> Play')
-    print('> Credits')
+    print('1. Play')
+    print('2. Credits')
     option = ''
-    while option not in ['Credits', 'Play']:
-        option = spellcheck(input())
-    if option ==  'Credits':
-        print('Charizard ASCII art: https://www.asciiart.eu/video-games/pokemon')
-        while option != 'Play':
-            option = spellcheck(input())
-    if option == 'Play':
+    while option not in ['1']:
+        option = input()
+        if option ==  '2':
+            print('Charizard ASCII art: https://www.asciiart.eu/video-games/pokemon')
+            print('Pokemon CSV data: https://gist.github.com/armgilles/194bcff35001e7eb53a2a8b441e8b2c6')
+            print('Moves CSV data: https://github.com/veekun/pokedex/blob/master/pokedex/data/csv/moves.csv')
+    if option == '1':
         time.sleep(0.3)
         print('Welcome to the World of Pythonmon!')
         time.sleep(1)
@@ -27,8 +27,9 @@ def gamestart():
         time.sleep(1)
         printpoke()
         chosenpokemon = ''
-        while chosenpokemon not in pokelist:
-            chosenpokemon = spellcheck(input())
+        while chosenpokemon not in ['1','2','3','4','5','6','7','8','9','10','11','12','13','14','15','16','17','18','19','20']:
+            chosenpokemon = input()
+        chosenpokemon = pokelist[int(chosenpokemon) - 1]
         chosenbasestats = pokemondictfinal[chosenpokemon]
         chosenbasestats['nature'] = random.choice(naturelist)
         randomEViv(chosenbasestats)
@@ -37,47 +38,49 @@ def gamestart():
         bag = {'Pokedollars': 500, 'Potions': 0, 'Super potions': 0, 'Hyper potions': 0}
         gamestate = True
         #Starts the game
+        time.sleep(0.5)
+        print("You are currently in Pythontown.")
         while gamestate == True:
             time.sleep(1)
-            print('> Search\n> View bag\n> Pokecenter\n> Pokeshop\n> End')
+            print('1. Search\n2. View bag\n3. Pokecenter\n4. Pokeshop\n5. End game')
             gamechoice = ''
-            while gamechoice not in ['End', 'Search', 'Pokecenter', 'Pokeshop', 'View bag']:
+            while gamechoice not in ['1','2','3','4','5']:
                 gamechoice = spellcheck(input())
             time.sleep(1)
 
-            if gamechoice == 'End': #Ends the game
+            if gamechoice == '5': #Ends the game
                 gamestate = False
 
-            if gamechoice == 'View bag':
+            if gamechoice == '2':
                 print('Pokedollars' + ': ' + str(bag['Pokedollars']))
                 print('Potions' + ': ' + str(bag['Potions']))
                 print('Super potions' + ': ' + str(bag['Super potions']))
                 print('Hyper potions' + ': ' + str(bag['Hyper potions']))
 
-            if gamechoice == 'Pokecenter': #Pokecenter option
+            if gamechoice == '3': #Pokecenter option
                 gamewait(1)
                 print('What would you like to do?')
                 pokecenteroption = ''
-                while pokecenteroption != 'Leave':
+                while pokecenteroption != '2':
                     time.sleep(0.5)
-                    print('> Heal\n> Leave')
-                    pokecenteroption = spellcheck(input())
-                    if pokecenteroption ==  'Heal':
+                    print('1. Heal\n2. Leave')
+                    pokecenteroption = input()
+                    if pokecenteroption ==  '1':
                         gamewait(4)
                         chosentruestats['HP'] = chosentruestats['MAXHP']
                         print('Your pokemon has been healed.')
 
-            if gamechoice == 'Pokeshop':
+            if gamechoice == '4': #Pokeshop option
                 gamewait(1)
                 print('What would you like to buy?')
                 pokeshopoption = ''
-                while pokeshopoption != 'Leave':
+                while pokeshopoption != '4':
                     time.sleep(0.5)
-                    print('> Potion\n> Super potion\n> Hyper potion\n> Leave')
+                    print('1. Potion\n2. Super potion\n3. Hyper potion\n4. Leave')
                     pokeshopoption = spellcheck(input())
                     price = 0
                     purchase = 0.1
-                    if pokeshopoption == 'Potion':
+                    if pokeshopoption == '1':
                         time.sleep(0.5)
                         print('Potions restore 20 HP.')
                         print('How many would you like to buy?')
@@ -96,7 +99,7 @@ def gamestart():
                                 bag['Pokedollars'] -= price
                                 bag['Potions'] += purchase
                                 print('You have purchased ' + str(purchase) + ' potions(s).')
-                    if pokeshopoption == 'Super potion':
+                    if pokeshopoption == '2':
                         time.sleep(0.5)
                         print('Super potions restore 60 HP.')
                         print('How many would you like to buy?')
@@ -115,7 +118,7 @@ def gamestart():
                                 bag['Pokedollars'] -= price
                                 bag['Super potions'] += purchase
                                 print('You have purchased ' + str(purchase) + ' super potion(s).')
-                    if pokeshopoption == 'Hyper potion':
+                    if pokeshopoption == '3':
                         time.sleep(0.5)
                         print('Hyper potions restore 120 HP.')
                         print('How many would you like to buy?')
@@ -135,7 +138,7 @@ def gamestart():
                                 bag['Hyper Potions'] += purchase
                                 print('You have purchased ' + str(purchase) + ' hyper potions(s).')
 
-            if gamechoice == 'Search': #Searchs for pokemon
+            if gamechoice == '1': #Searchs for pokemon
                 weather = 'None' #Resets weather
                 enemypokemon = random.choice(pokelist)
                 enemybasestats = pokemondictfinal[enemypokemon]
@@ -145,39 +148,190 @@ def gamestart():
                 giveothervalues(enemytruestats)
                 gamewait(3)
                 print("You've encountered a wild " + str(enemypokemon) + '.')
-                time.sleep(0.5)
-                print('What do you want to do?')
-                print('> Fight\n> Bag\n> Run')
-                battleoption = ''
-                while battleoption not in ['Fight', 'Bag', 'Run']:
-                    battleoption = spellcheck(input())
-                if battleoption == 'Fight':
+                battlestate = True
+                while battlestate == True:
                     time.sleep(0.5)
-                    printpokemoves(chosenpokemon)
-                    chosenmove = ''
-                    #Choosing pokemon move and calculating damage
-                    while chosenmove not in pokemoveslist[chosenpokemon]:
-                        chosenmove = spellcheck(input())
-                    chosenmovefinder = movesdictfinal[removespacelower(chosenmove)] #Gives data for chosenmove
-                    chosenmovetype = typeidtotype(chosenmovefinder['type_id']) #Gives move type
-                    chosentypes = [chosentruestats['Type 1'], chosentruestats['Type 2']] #Makes a list of chosen pokemon's types
-                    enemytypes = [chosentruestats['Type 1'], chosentruestats['Type 2']]
-                    if chosenmovefinder['damage_class_id'] == 2:
-                        chosenburn = burnmodcalc(chosentruestats['nonvolatile'])
-                        chosendamage = damagecalc(chosentruestats['Attack'], enemytruestats['Defense'], chosenmovefinder['power'], chosentruestats['atkstage'], enemytruestats['defstage'],weather, chosenburn, chosenmovetype, chosentypes, enemytypes)
-                    if chosenmovefinder['damage_class_id'] == 3:
-                        chosenburn = 1
-                        chosendamage = damagecalc(chosentruestats['Sp. Atk'], enemytruestats['Sp. Def'], chosenmovefinder['power'], chosentruestats['spatkstage'], enemytruestats['spdefstage'], weather, chosenburn, chosenmovetype, chosentypes, enemytypes)
-                    #Choosing enemy pokemon move and calculating damage
+                    print('What do you want to do?')
+                    turnend = False
+                    while turnend == False:
+                        print('1. Fight\n2. Bag\n3. Run')
+                        battleoption = ''
+                        while battleoption not in ['1', '2', '3']:
+                            battleoption = input()
+                        if battleoption == '1':
+                            time.sleep(0.5)
+                            printpokemoves(chosenpokemon)
+                            chosenmove = ''
+                            #Choosing pokemon move and calculating damage
+                            while chosenmove not in ['1','2','3','4']:
+                                chosenmove = input()
+                            chosenmove = pokemoveslist[chosenpokemon][int(chosenmove) - 1]
+                            chosenmovefinder = movesdictfinal[removespacelower(chosenmove)] #Gives data for chosenmove
+                            chosenmovetype = typeidtotype(chosenmovefinder['type_id']) #Gives move type
+                            chosentypes = [chosentruestats['Type 1'], chosentruestats['Type 2']] #Makes a list of chosen pokemon's types
+                            enemytypes = [enemytruestats['Type 1'], enemytruestats['Type 2']]
+                            if chosenmovefinder['damage_class_id'] == 2:
+                                chosenburn = burnmodcalc(chosentruestats['nonvolatile'])
+                                chosendamage = damagecalc(chosenmove, chosentruestats['Attack'], enemytruestats['Defense'], chosenmovefinder['power'], chosentruestats['atkstage'], enemytruestats['defstage'],weather, chosenburn, chosenmovetype, chosentypes, enemytypes)
+                            if chosenmovefinder['damage_class_id'] == 3:
+                                chosenburn = 1
+                                chosendamage = damagecalc(chosenmove, chosentruestats['Sp. Atk'], enemytruestats['Sp. Def'], chosenmovefinder['power'], chosentruestats['spatkstage'], enemytruestats['spdefstage'], weather, chosenburn, chosenmovetype, chosentypes, enemytypes)
+                            turnend = True
+                            #Choosing enemy pokemon move and calculating damage
+                        if battleoption == '2':
+                            print('1. Potions' + ': ' + str(bag['Potions']))
+                            print('2. Super potions' + ': ' + str(bag['Super potions']))
+                            print('3. Hyper potions' + ': ' + str(bag['Hyper potions']))
+                            print('4. Leave')
+                            bagoption = ''
+                            while bagoption not in ['4']:
+                                bagoption = input()
+                                if bagoption == '1':
+                                    if bag['Potions'] > 0:
+                                        healing = 0
+                                        while chosentruestats['HP'] < chosentruestats['MAXHP'] and healing < 20:
+                                            chosentruestats['HP'] += 1
+                                            healing += 1
+                                        turnend = True
+                                        bagoption = '4'
+                                    else:
+                                        print('You do not have potions.')
+                                        bagoption = '4'
+                                if bagoption == '2':
+                                    if bag['Super potions'] > 0:
+                                        healing = 0
+                                        while chosentruestats['HP'] < chosentruestats['MAXHP'] and healing < 60:
+                                            chosentruestats['HP'] += 1
+                                            healing += 1
+                                        turnend = True
+                                        bagoption = '4'
+                                    else:
+                                        print('You do not have super potions.')
+                                        bagoption = '4'
+                                if bagoption == '3':
+                                    if bag['Hyper potions'] > 0:
+                                        healing = 0
+                                        while chosentruestats['HP'] < chosentruestats['MAXHP'] and healing < 120:
+                                            chosentruestats['HP'] += 1
+                                            healing += 1
+                                        turnend = True
+                                        bagoption = '4'
+                                    else:
+                                        print('You do not have hyper potions.')
+                                        bagoption = '4'
+                            if bagoption == '4':
+                                turnend = False
+                        if battleoption == '3':
+                            if chosentruestats['Speed'] > enemytruestats['Speed']:
+                                battlestate = False
+                    #Calculations for enemy damage
                     enemymove = random.choice(pokemoveslist[enemypokemon])
                     enemymovefinder = movesdictfinal[removespacelower(enemymove)]
                     enemymovetype = typeidtotype(enemymovefinder['type_id'])
                     if enemymovefinder['damage_class_id'] == 2:
                         enemyburn = burnmodcalc(enemytruestats['nonvolatile'])
-                        enemydamage = damagecalc(enemytruestats['Attack'], enemytruestats['Defense'], enemymovefinder['power'], enemytruestats['atkstage'], chosentruestats['defstage'], weather, enemyburn, enemymovetype, enemytypes, chosentypes)
+                        enemydamage = damagecalc(enemymove, enemytruestats['Attack'], enemytruestats['Defense'], enemymovefinder['power'], enemytruestats['atkstage'], chosentruestats['defstage'], weather, enemyburn, enemymovetype, enemytypes, chosentypes)
                     if enemymovefinder['damage_class_id'] == 3:
                         enemyburn = 1
-                        enemydamage = damagecalc(enemytruestats['Sp. Atk'], chosentruestats['Sp. Def'], enemymovefinder['power'], enemytruestats['spatkstage'], chosentruestats['spdefstage'], weather, enemyburn, enemymovetype, enemytypes, chosentypes)
+                        enemydamage = damagecalc(enemymove, enemytruestats['Sp. Atk'], chosentruestats['Sp. Def'], enemymovefinder['power'], enemytruestats['spatkstage'], chosentruestats['spdefstage'], weather, enemyburn, enemymovetype, enemytypes, chosentypes)
+                    #Choosing who goes first
+                    chosenspeed = chosentruestats['Speed'] * (1 + (chosentruestats['spdstage'] / 2))
+                    enemyspeed = enemytruestats['Speed'] * (1 + (enemytruestats['spdstage'] / 2))
+
+                    if (chosenmovefinder['priority'] > enemymovefinder['priority']) or ((chosenmovefinder['priority'] == enemymovefinder['priority']) and (chosenspeed > enemyspeed)): #Situation for chosen pokemon attacking first
+
+                        chosenstall = stallfinder('chosen', chosentruestats, chosenpokemon, enemypokemon)
+
+                        if chosenstall == True:
+                            if chosentruestats['nonvolatile'] == 'Frozen':
+                                print('Your ' + chosenpokemon + ' is frozen solid!')
+                            if chosentruestats['nonvolatile'] == 'Asleep':
+                                print('Your ' + chosenpokemon + ' is fast asleep.')
+                            if chosentruestats['nonvolatile'] == 'Paralyzed':
+                                print('Your ' + chosenpokemon + " is paralyzed! It can't move!")
+
+                        elif chosenmovefinder['damage_class_id'] == 1:
+                            print('Your ' + chosenpokemon + ' used ' + chosenmove + '.')
+                            if move == 'Swords dance':
+                                if pokemon == 'chosen':
+                                    print('Your ' + chosenpokemon + "'s Attack rose!")
+                                else:
+                                    print('The wild ' + enemypokemon + "'s Attack rose!")
+                                pokemontruestats['atkstage'] += 2
+                            if move == 'Soft-boiled':
+                                sbhealing = 0
+                                while (pokemontruestats['HP'] < pokemontruestats['MAXHP']) and (sbhealing < (0.5 * pokemontruestats['MAXHP'])):
+                                    sbhealing += 1
+                                    pokemontruestats['HP'] += 1
+                                time.sleep(1)
+                                if pokemon == 'chosen':
+                                    print('Your ' + chosenpokemon + ' regained health!')
+                                else:
+                                    print('The wild ' + enemypokemon + ' regained health!')
+
+
+                        else:
+                            if chosenmove == 'Guillotine':
+                                if random.randrange(0,100) < chosenmovefinder['accuracy']:
+                                    enemytruestats['HP'] = 0
+                                    time.sleep(0.3)
+                                    print('The wild ' + enemypokemon + ' has fainted.')
+                                    time.sleep(0.5)
+                                    print('You have won the battle!')
+                                    battlestate = False
+                            else:
+                                time.sleep(0.5)
+                                print('Your ' + chosenpokemon + ' used ' + chosenmove + '.')
+                                print(chosendamage)
+                                print(enemytruestats['HP'])
+                                enemytruestats['HP'] -= chosendamage
+                                print(enemytruestats['HP'])
+                                print(chosenmovetype)
+                                print(enemytypes)
+                                print(calcEffectiveness(chosenmovetype,enemytypes[0],enemytypes[1]))
+                                time.sleep(0.5)
+                                effectivenessmessage(calcEffectiveness(chosenmovetype,enemytypes[0],enemytypes[1]))
+                                if enemytruestats['HP'] <= 0:
+                                    time.sleep(0.3)
+                                    print('The wild' + enemypokemon + ' has fainted.')
+                                    time.sleep(0.5)
+                                    print('You have won the battle!')
+                                    battlestate = False
+
+                        if enemystall == True:
+                            consultstallList()
+                        elif enemymovefinder['damage_class_id'] == 1:
+                            consultspeciallist()
+                        else:
+                            if enemymove == 'Guillotine':
+                                if random.range(0,100) < enemymovefinder['accuracy']:
+                                    chosentruestats['HP'] = 0
+                                    time.sleep(0.3)
+                                    print('Your pokemon has fainted.')
+                                    time.sleep(0.5)
+                                    print('You have lost the battle.')
+                                    battlestate = False
+                            else:
+                                time.sleep(0.5)
+                                print(enemypokemon + ' used ' + enemymove + '.')
+                                chosentruestats['HP'] -= enemydamage
+                                time.sleep(0.5)
+                                effectivenessmessage(calcEffectiveness(enemymovetype,chosentypes[0],chosentypes[1]))
+                                if chosentruestats['HP'] <= 0:
+                                    time.sleep(0.3)
+                                    print('Your pokemon has fainted.')
+                                    time.sleep(0.5)
+                                    print('You have lost the battle.')
+                                    battlestate = False
+                    else:
+                        if enemystall == True:
+                            consultstallList()
+                        if enemymovefinder:
+                            return
+
+
+
+
 
 
 

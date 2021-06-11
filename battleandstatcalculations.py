@@ -53,13 +53,13 @@ def othercalc(base, IV, EV, nature, stat):
     nmod = natmodcalc(nature, stat)
     return (((((2 * base + IV + ((EV / 4) // 1)) * 50) / 100) // 1 + 5) * nmod) // 1
 
-def damagecalc(attack, enemydefense, pow, atkstage, enemydefstage, weather, burn, movetype, attackertypes, defendertypes):
+def damagecalc(move, attack, enemydefense, pow, atkstage, enemydefstage, weather, burn, movetype, attackertypes, defendertypes):
     effectiveness = calcEffectiveness(movetype, defendertypes[0], defendertypes[1])
-    modifier = modifiercalc(weather, movetype, attackertypes, effectiveness, burn)
-    damage = (((((((2 * 50) / 5) + 2) * pow * (attack * (1 + (atkstage / 2)))) / enemydefense ) / 50) + 2) * modifier
+    modifier = modifiercalc(weather, movetype, attackertypes, effectiveness, burn, move)
+    damage = (((((((2 * 50) / 5) + 2) * pow * (attack * (1 + (atkstage / 2)))) / (enemydefense * (1 + (enemydefstage / 2))) / 50) + 2) * modifier
     return int(damage // 1)
 
-def modifiercalc(weather, movetype, attackertypes, effectiveness, burn):
+def modifiercalc(weather, movetype, attackertypes, effectiveness, burn, move):
     modifier = 1
     if (movetype == 'water' and weather == 'rain') or (movetype == 'fire' and weather == 'harsh sunlight'):
         modifier *= 1.5
@@ -71,47 +71,50 @@ def modifiercalc(weather, movetype, attackertypes, effectiveness, burn):
     rand = (random.randint(85, 100)) * 0.01
     modifier *= rand
     modifier *= effectiveness
-    if random.randint(0, 24) == 0:
-        modifier += 1.5
+    if move == 'Cross poison':
+        if random.randint(0, 8) == 0:
+            modifier *= 1.5
+        if random.randint(0, 24) == 0:
+            modifier *= 1.5
     return modifier
 
 def typeidtotype(id):
     if id == 1:
-        return 'normal'
+        return 'Normal'
     if id == 2:
-        return 'fighting'
+        return 'Fighting'
     if id == 3:
-        return 'flying'
+        return 'Flying'
     if id == 4:
-        return 'poison'
+        return 'Poison'
     if id == 5:
-        return 'ground'
+        return 'Ground'
     if id == 6:
-        return 'rock'
+        return 'Rock'
     if id == 7:
-        return 'bug'
+        return 'Bug'
     if id == 8:
-        return 'ghost'
+        return 'Ghost'
     if id == 9:
-        return 'steel'
+        return 'Steel'
     if id == 10:
-        return 'fire'
+        return 'Fire'
     if id == 11:
-        return 'water'
+        return 'Water'
     if id == 12:
-        return 'grass'
+        return 'Grass'
     if id == 13:
-        return 'electric'
+        return 'Electric'
     if id == 14:
-        return 'pyschic'
+        return 'Pyschic'
     if id == 15:
-        return 'ice'
+        return 'Ice'
     if id == 16:
-        return 'dragon'
+        return 'Dragon'
     if id == 17:
-        return 'dark'
+        return 'Dark'
     if id == 18:
-        return 'fairy'
+        return 'Fairy'
 
 def randomivs(dict):
     dict['hpiv'] = random.randint(0, 31)
@@ -156,6 +159,9 @@ def givestatstages(dict):
 def givestatuses(dict):
     dict['nonvolatile'] = '0'
     dict['volatile'] = []
+    dict['asleepturns'] = 0
+    dict['randsleepturns'] = 0
+    dict['confusedturns'] = 0
 
 def randomEViv(dict):
     randomivs(dict)
@@ -196,3 +202,59 @@ def calctruestats(dict):
     newdict['Speed'] = spdstat
 
     return newdict
+
+def stallfinder(pokemon, pokemontruestats, chosenpokemon, enemypokemon):
+    stall = False
+    if pokemontruestats['nonvolatile'] in ['Frozen','Asleep','Paralyzed']:
+        if pokemontruestats['nonvolatile'] == 'Frozen':
+            if random.randrange(0,100) < 20:
+                stall = False
+                pokemontruestats['nonvolatile'] = '0'
+                if pokemon == 'chosen':
+                    print('Your ' + chosenpokemon + ' has been thawed!')
+                else:
+                    print('The wild ' + enemypokemon + ' has been thawed!')
+            elif chosenmove in ['Fusion flare','Flame wheel','Sacred fire','Flare blitz','Scald','Steam eruption']:
+                stall = False
+                pokemontruestats['nonvolatile'] = '0'
+                if pokemon == 'chosen':
+                    print('Your ' + chosenpokemon + ' has been thawed!')
+                else:
+                    print('The wild ' + enemypokemon + ' has been thawed!')
+            else:
+                chosenstall = True
+        if pokemontruestats['nonvolatile'] == 'Asleep':
+            if pokemontruestats['asleepturns'] < pokemontruestats['randsleepturns']:
+                stall = True
+                pokemontruestats['asleepturns'] += 1
+            else:
+                pokemontruestats['asleepturns'] = 0
+                pokemontruestats['randsleepturns'] = 0
+                stall = False
+                if pokemon == 'chosen':
+                    print('Your ' + chosenpokemon + ' has woken up!')
+                else:
+                    print('The enemy ' + enemypokemon + ' has woken up!')
+        if pokemontruestats['nonvolatile'] == 'Paralyzed':
+            if random.randrange(0,100) < 25:
+                stall = True
+            else:
+                stall = False
+    return stall
+
+def calcwatershuriken():
+    times = 2
+    random = random.randrange(0,8)
+    if random in [0, 1, 2]:
+        times = 2
+    if random in [3, 4, 5]:
+        times = 3
+    if random = 6:
+        times = 4
+    if random = 7:
+        times = 5
+    return times
+
+
+    else:
+        return times
