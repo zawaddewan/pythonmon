@@ -233,6 +233,10 @@ def gamestart():
                         if battleoption == '3':
                             if chosentruestats['Speed'] > enemytruestats['Speed']:
                                 battlestate = False
+                            else:
+                                times = 1
+                                if random.randrange(0,100) < ((chosentruestats['Speed'] * 128) / enemytruestats['Speed'] + 30 * times) % 256
+                                times += 1
                     #Calculations for enemy damage
                     enemymove = random.choice(pokemoveslist[enemypokemon])
                     enemymovefinder = movesdictfinal[removespacelower(enemymove)]
