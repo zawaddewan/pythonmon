@@ -535,7 +535,7 @@ def setstatuseffects(pokemon, movefinder, defendertypes, pokemontruestats, defen
              else:
                  time.sleep(0.5)
                  print('The wild ' + enemypokemon + ' is unable to be poisoned.\n')
-        if random.randrange(0,100) < movefinder['effect_chance']:
+        elif random.randrange(0,100) < movefinder['effect_chance']:
             if defendertruestats['nonvolatile'] == '0':
                 defendertruestats['nonvolatile'] == 'Poisoned'
                 if pokemon == 'enemy':
@@ -809,3 +809,14 @@ def resetstatus(dict):
     dict['spatkstage'] = 0
     dict['spdefstage'] = 0
     dict['spdstage'] = 0
+
+def recoilcalc(pokemon, pokemonmove, pokemondamage, pokemontruestats, chosenpokemon, enemypokemon):
+    if pokemonmove in ['Brave bird', 'Flare blitz', 'Double-edge']:
+        if pokemon == 'chosen':
+            pokemontruestats['HP'] -= int((pokemondamage / 3) // 1)
+            time.sleep(0.5)
+            print('Your ' + chosenpokemon + ' is damaged by recoil!\n')
+        if pokemon == 'enemy':
+            pokemontruestats['HP'] -= int((pokemondamage / 3) // 1)
+            time.sleep(0.5)
+            print('The wild ' + enemypokemon+ ' is damaged by recoil!\n')
