@@ -273,6 +273,8 @@ def gamestart():
 
                         else:
                             if chosenmove == 'Guillotine':
+                                time.sleep(0.5)
+                                print('Your ' + chosenpokemon + ' used ' + chosenmove + '.\n')
                                 if random.randrange(0,100) < chosenmovefinder['accuracy']:
                                     enemytruestats['HP'] = 0
                                     time.sleep(0.5)
@@ -280,6 +282,10 @@ def gamestart():
                                     time.sleep(0.5)
                                     print('You have won the battle!\n')
                                     battlestate = False
+                                else:
+                                    time.sleep(0.5)
+                                    print('Your ' + chosenpokemon + ' has missed.\n')
+
                             else:
                                 time.sleep(0.5)
                                 print('Your ' + chosenpokemon + ' used ' + chosenmove + '.\n')
@@ -330,6 +336,8 @@ def gamestart():
 
                             else:
                                 if enemymove == 'Guillotine':
+                                    time.sleep(0.5)
+                                    print('The wild ' + enemypokemon + ' used ' + enemymove + '.\n')
                                     if random.randrange(0,100) < enemymovefinder['accuracy']:
                                         chosentruestats['HP'] = 0
                                         time.sleep(0.5)
@@ -340,6 +348,9 @@ def gamestart():
                                         gamestate = False
                                         time.sleep(0.5)
                                         print('Game over...\n')
+                                    else:
+                                        time.sleep(0.5)
+                                        print('The wild ' + enemypokemon + ' has missed.\n')
                                 else:
                                     time.sleep(0.5)
                                     print('The wild ' + enemypokemon + ' used ' + enemymove + '.\n')
@@ -390,6 +401,8 @@ def gamestart():
 
                         else:
                             if enemymove == 'Guillotine':
+                                time.sleep(0.5)
+                                print('The wild ' + enemypokemon + ' used ' + enemymove + '.\n')
                                 if random.randrange(0,100) < enemymovefinder['accuracy']:
                                     chosentruestats['HP'] = 0
                                     time.sleep(0.5)
@@ -400,6 +413,9 @@ def gamestart():
                                     gamestate = False
                                     time.sleep(0.5)
                                     print('Game over...\n')
+                                else:
+                                    time.sleep(0.5)
+                                    print('The wild ' + enemypokemon + ' has missed.\n')
                             else:
                                 time.sleep(0.5)
                                 print('The wild ' + enemypokemon + ' used ' + enemymove + '.\n')
@@ -454,6 +470,8 @@ def gamestart():
 
                             else:
                                 if chosenmove == 'Guillotine':
+                                    time.sleep(0.5)
+                                    print('Your ' + chosenpokemon + ' used ' + chosenmove + '.\n')
                                     if random.randrange(0,100) < chosenmovefinder['accuracy']:
                                         enemytruestats['HP'] = 0
                                         time.sleep(0.5)
@@ -461,6 +479,9 @@ def gamestart():
                                         time.sleep(0.5)
                                         print('You have won the battle!\n')
                                         battlestate = False
+                                    else:
+                                        time.sleep(0.5)
+                                        print('Your ' + chosenpokemon + ' has missed.\n')
                                 else:
                                     time.sleep(0.5)
                                     print('Your ' + chosenpokemon + ' used ' + chosenmove + '.\n')

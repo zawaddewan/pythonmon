@@ -56,7 +56,7 @@ def othercalc(base, IV, EV, nature, stat):
 def damagecalc(move, attack, enemydefense, pow, atkstage, enemydefstage, weather, burn, movetype, attackertypes, defendertypes):
     effectiveness = calcEffectiveness(movetype, defendertypes[0], defendertypes[1])
     modifier = modifiercalc(weather, movetype, attackertypes, effectiveness, burn, move)
-    damage = ((((((2 * 50) / 5) + 2) * pow * (attack * (1 + (atkstage / 2)))) / (enemydefense * (1 + (enemydefstage / 2))) / 50) + 2) * modifier
+    damage = ((((((2 * 50) / 5) + 2) * pow * (attack * max(2, 2 + atkstage)/max(2, 2 - atkstage))) / (enemydefense * max(2, 2 + enemydefstage)/max(2, 2 - enemydefstage)) / 50) + 2) * modifier
     return int(damage // 1)
 
 def modifiercalc(weather, movetype, attackertypes, effectiveness, burn, move):
@@ -573,57 +573,57 @@ def setstatuseffects(pokemon, movefinder, defendertypes, pokemontruestats, defen
     if 'spdefdown' in stagechanges:
         if random.randrange(0,100) < movefinder['stat_chance']:
             if movefinder['affects_who'] == 'player':
-                if pokemontruestats['spdefstage'] < 6:
+                if pokemontruestats['spdefstage'] > -6:
                     pokemontruestats['spdefstage'] -= 1
                     time.sleep(0.5)
-                    print('Your ' + chosenpokemon + "'s Special Defense rose!\n")
+                    print('Your ' + chosenpokemon + "'s Special Defense fell!\n")
                 else:
                     time.sleep(0.5)
-                    print('Your ' + chosenpokemon + "'s Special Defense cannot be increased further.\n")
+                    print('Your ' + chosenpokemon + "'s Special Defense cannot be decreased further.\n")
             if movefinder['affects_who'] == 'opponent':
-                if defendertruestats['spdefstage'] < 6:
+                if defendertruestats['spdefstage'] > -6:
                     defendertruestats['spdefstage'] -= 1
                     time.sleep(0.5)
-                    print('The wild ' + enemypokemon + "'s Special Defense rose!\n")
+                    print('The wild ' + enemypokemon + "'s Special Defense fell!\n")
                 else:
                     time.sleep(0.5)
-                    print('The wild ' + enemypokemon + "'s Special Defense cannot be increased further.\n")
+                    print('The wild ' + enemypokemon + "'s Special Defense cannot be decreased further.\n")
     if 'spddown' in stagechanges:
         if random.randrange(0,100) < movefinder['stat_chance']:
             if movefinder['affects_who'] == 'player':
-                if pokemontruestats['spdstage'] < 6:
+                if pokemontruestats['spdstage'] > -6:
                     pokemontruestats['spdstage'] -= 1
                     time.sleep(0.5)
-                    print('Your ' + chosenpokemon + "'s Speed rose!\n")
+                    print('Your ' + chosenpokemon + "'s Speed fell!\n")
                 else:
                     time.sleep(0.5)
-                    print('Your ' + chosenpokemon + "'s Speed cannot be increased further.\n")
+                    print('Your ' + chosenpokemon + "'s Speed cannot be decreased further.\n")
             if movefinder['affects_who'] == 'opponent':
-                if defendertruestats['spdstage'] < 6:
+                if defendertruestats['spdstage'] > -6:
                     defendertruestats['spdstage'] -= 1
                     time.sleep(0.5)
-                    print('The wild ' + enemypokemon + "'s Speed rose!\n")
+                    print('The wild ' + enemypokemon + "'s Speed fell!\n")
                 else:
                     time.sleep(0.5)
-                    print('The wild ' + enemypokemon + "'s Speed cannot be increased further.\n")
+                    print('The wild ' + enemypokemon + "'s Speed cannot be decreased further.\n")
     if 'defdown' in stagechanges:
         if random.randrange(0,100) < movefinder['stat_chance']:
             if movefinder['affects_who'] == 'player':
-                if pokemontruestats['defstage'] < 6:
+                if pokemontruestats['defstage'] > -6:
                     pokemontruestats['defstage'] -= 1
                     time.sleep(0.5)
-                    print('Your ' + chosenpokemon + "'s Defense rose!\n")
+                    print('Your ' + chosenpokemon + "'s Defense fell!\n")
                 else:
                     time.sleep(0.5)
-                    print('Your ' + chosenpokemon + "'s Defense cannot be increased further.\n")
+                    print('Your ' + chosenpokemon + "'s Defense cannot be decreased further.\n")
             if movefinder['affects_who'] == 'opponent':
-                if defendertruestats['defstage'] < 6:
+                if defendertruestats['defstage'] > -6:
                     defendertruestats['defstage'] -= 1
                     time.sleep(0.5)
-                    print('The wild ' + enemypokemon + "'s Defense rose!\n")
+                    print('The wild ' + enemypokemon + "'s Defense fell!\n")
                 else:
                     time.sleep(0.5)
-                    print('The wild ' + enemypokemon + "'s Defense cannot be increased further.\n")
+                    print('The wild ' + enemypokemon + "'s Defense cannot be decreased further.\n")
 
 
 
