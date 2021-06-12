@@ -162,6 +162,7 @@ def gamestart():
                     print('Your ' + chosenpokemon + "'s HP: " + str(chosentruestats['HP']) + '\nThe wild ' + enemypokemon + "'s HP: " + str(enemytruestats['HP']))
                     print('What do you want to do?')
                     turnend = False
+                    runtimes = 1
                     while turnend == False:
                         print('1. Fight\n2. Bag\n3. Run\n')
                         battleoption = ''
@@ -234,9 +235,10 @@ def gamestart():
                             if chosentruestats['Speed'] > enemytruestats['Speed']:
                                 battlestate = False
                             else:
-                                times = 1
-                                if random.randrange(0,100) < ((chosentruestats['Speed'] * 128) / enemytruestats['Speed'] + 30 * times) % 256
-                                times += 1
+                                if random.randrange(0,100) < ((chosentruestats['Speed'] * 128) / enemytruestats['Speed'] + 30 * runtimes) % 256:
+                                    battlestate = False
+                                else:
+                                    runtimes += 1
                     #Calculations for enemy damage
                     enemymove = random.choice(pokemoveslist[enemypokemon])
                     enemymovefinder = movesdictfinal[removespacelower(enemymove)]
