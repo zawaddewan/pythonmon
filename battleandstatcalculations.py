@@ -56,7 +56,7 @@ def othercalc(base, IV, EV, nature, stat):
 def damagecalc(move, attack, enemydefense, pow, atkstage, enemydefstage, weather, burn, movetype, attackertypes, defendertypes):
     effectiveness = calcEffectiveness(movetype, defendertypes[0], defendertypes[1])
     modifier = modifiercalc(weather, movetype, attackertypes, effectiveness, burn, move)
-    damage = (((((((2 * 50) / 5) + 2) * pow * (attack * (1 + (atkstage / 2)))) / (enemydefense * (1 + (enemydefstage / 2))) / 50) + 2) * modifier
+    damage = ((((((2 * 50) / 5) + 2) * pow * (attack * (1 + (atkstage / 2)))) / (enemydefense * (1 + (enemydefstage / 2))) / 50) + 2) * modifier
     return int(damage // 1)
 
 def modifiercalc(weather, movetype, attackertypes, effectiveness, burn, move):
@@ -71,7 +71,9 @@ def modifiercalc(weather, movetype, attackertypes, effectiveness, burn, move):
     rand = (random.randint(85, 100)) * 0.01
     modifier *= rand
     modifier *= effectiveness
-    if move == 'Cross poison':
+    if move == 'stallbyconfusion':
+        modifier *= 1
+    elif move in ['Cross poison', 'Leaf blade']:
         if random.randint(0, 8) == 0:
             modifier *= 1.5
         if random.randint(0, 24) == 0:
@@ -158,21 +160,27 @@ def givestatstages(dict):
 
 def givestatuses(dict):
     dict['nonvolatile'] = '0'
-    dict['volatile'] = []
+    dict['confused'] = False
+    dict['confusedturns'] = 0
     dict['asleepturns'] = 0
     dict['randsleepturns'] = 0
-    dict['confusedturns'] = 0
+    dict['flinched'] = False
+    dict['outrageturns'] = 0
+    dict['randoutrageturns'] = 0
+    dict['thrashturns'] = 0
+    dict['randthrashturns'] = 0
 
 def randomEViv(dict):
     randomivs(dict)
     randomevs(dict)
 
-def giveothervalues(dict):
+def giveothervalues(dict, pokemon):
     givestatstages(dict)
     givestatuses(dict)
+    dict['moves'] = pokemoveslist[pokemon]
 
 def burnmodcalc(status):
-    if status == 'burn':
+    if status == 'Burned':
         return 0.5
     else:
         return 1
@@ -203,7 +211,7 @@ def calctruestats(dict):
 
     return newdict
 
-def stallfinder(pokemon, pokemontruestats, chosenpokemon, enemypokemon):
+def stallfinder(pokemon, move, pokemontruestats, chosenpokemon, enemypokemon):
     stall = False
     if pokemontruestats['nonvolatile'] in ['Frozen','Asleep','Paralyzed']:
         if pokemontruestats['nonvolatile'] == 'Frozen':
@@ -214,7 +222,7 @@ def stallfinder(pokemon, pokemontruestats, chosenpokemon, enemypokemon):
                     print('Your ' + chosenpokemon + ' has been thawed!')
                 else:
                     print('The wild ' + enemypokemon + ' has been thawed!')
-            elif chosenmove in ['Fusion flare','Flame wheel','Sacred fire','Flare blitz','Scald','Steam eruption']:
+            elif move in ['Fusion flare','Flame wheel','Sacred fire','Flare blitz','Scald','Steam eruption']:
                 stall = False
                 pokemontruestats['nonvolatile'] = '0'
                 if pokemon == 'chosen':
@@ -227,6 +235,14 @@ def stallfinder(pokemon, pokemontruestats, chosenpokemon, enemypokemon):
             if pokemontruestats['asleepturns'] < pokemontruestats['randsleepturns']:
                 stall = True
                 pokemontruestats['asleepturns'] += 1
+                if pokemontruestats['asleepturns'] >= pokemontruestats['randsleepturns']:
+                    pokemontruestats['asleepturns'] = 0
+                    pokemontruestats['randsleepturns'] = 0
+                    stall = False
+                    if pokemon == 'chosen':
+                        print('Your ' + chosenpokemon + ' has woken up!')
+                    else:
+                        print('The enemy ' + enemypokemon + ' has woken up!')
             else:
                 pokemontruestats['asleepturns'] = 0
                 pokemontruestats['randsleepturns'] = 0
@@ -240,6 +256,42 @@ def stallfinder(pokemon, pokemontruestats, chosenpokemon, enemypokemon):
                 stall = True
             else:
                 stall = False
+        if  pokemontruestats['confused'] == True and stall == False:
+            if pokemontruestats['confusedturns'] < 2:
+                if random.randange(0,3) == 0:
+                    stall = 'confusion'
+                    pokemontruestats['confusedturns'] += 1
+                else:
+                    stall = False
+                    pokemontruestats['confusedturns'] += 1
+            elif pokemontruestats['confusedturns'] == 5:
+                stall = False
+                pokemontruestats['confused'] = False
+                pokemontruestats['confusedturns'] = 0
+                if pokemon == 'chosen':
+                    print('Your ' + chosenpokemon + ' has snapped out of confusion!')
+                else:
+                    print('The enemy ' + enemypokemon + ' has snapped out of confusion!')
+            else:
+                if random.randrange(0,100) < 20:
+                    stall = False
+                    pokemontruestats['confused'] = False
+                    pokemontruestats['confusedturns'] = 0
+                    if pokemon == 'chosen':
+                        print('Your ' + chosenpokemon + ' has snapped out of confusion!')
+                    else:
+                        print('The enemy ' + enemypokemon + ' has snapped out of confusion!')
+                else:
+                    if random.randrange(0,3) == 0:
+                        stall = 'confusion'
+                        pokemontruestats['confusedturns'] += 1
+                    else:
+                        stall = False
+                        pokemontruestats['confusedturns'] += 1
+        if pokemontruestats['flinched'] == True and stall == False:
+            stall = True
+
+
     return stall
 
 def calcwatershuriken():
@@ -249,12 +301,438 @@ def calcwatershuriken():
         times = 2
     if random in [3, 4, 5]:
         times = 3
-    if random = 6:
+    if random == 6:
         times = 4
-    if random = 7:
+    if random == 7:
         times = 5
     return times
 
+def consultspeciallist(pokemon, pokemontruestats, defendertruestats, chosenpokemon, enemypokemon, move, defendermove, chosenmove, enemymove):
+    if pokemon == 'chosen':
+        time.sleep(0.5)
+        print('Your ' + chosenpokemon + ' used ' + chosenmove + '.\n')
+    if pokemon == 'enemy':
+        time.sleep(0.5)
+        print('The wild ' + enemypokemon + ' used ' + enemymove + '.\n')
+    if move == 'Swords dance':
+        if pokemontruestats['atkstage'] < 5:
+            pokemontruestats['atkstage'] += 2
+            if pokemon == 'chosen':
+                time.sleep(0.5)
+                print('Your ' + chosenpokemon + "'s Attack rose sharply!\n")
+            else:
+                time.sleep(0.5)
+                print('The wild ' + enemypokemon + "'s Attack rose sharply!\n")
+        elif pokemontruestats['atkstage'] == 5:
+            pokemontruestats['atkstage'] += 1
+            if pokemon == 'chosen':
+                time.sleep(0.5)
+                print('Your ' + chosenpokemon + "'s Attack rose!\n")
+            else:
+                time.sleep(0.5)
+                print('The wild ' + enemypokemon + "'s Attack rose!\n")
+        else:
+            if pokemon == 'chosen':
+                time.sleep(0.5)
+                print('Your ' + chosenpokemon + "'s Attack cannot be increased further.\n")
+            else:
+                time.sleep(0.5)
+                print('The wild ' + enemypokemon + "'s Attack cannot be increased further.\n")
+    if move == 'Soft-boiled':
+        sbhealing = 0
+        while (pokemontruestats['HP'] < pokemontruestats['MAXHP']) and (sbhealing < (0.5 * pokemontruestats['MAXHP'])):
+            sbhealing += 1
+            pokemontruestats['HP'] += 1
+        time.sleep(1)
+        if pokemon == 'chosen':
+            time.sleep(0.5)
+            print('Your ' + chosenpokemon + ' regained health!\n')
+        else:
+            time.sleep(0.5)
+            print('The wild ' + enemypokemon + ' regained health!\n')
+    if move == 'Sing':
+        if random.randrange(0,100) < 55:
+            if defendertruestats['nonvolatile'] == '0':
+                defendertruestats['randsleepturns'] = random.randint(1,3)
+                defendertruestats['nonvolatile'] = 'Asleep'
+            else:
+                if pokemon == 'enemy':
+                    time.sleep(0.5)
+                    print('Your ' + chosenpokemon + " is already " + pokemontruestats['nonvolatile'] + ", it can't be put to sleep!\n")
+                else:
+                    time.sleep(0.5)
+                    print('The wild ' + enemypokemon + " is already " + pokemontruestats['nonvolatile'] + ", it can't be put to sleep!\n")
+        else:
+            if pokemon == 'chosen':
+                time.sleep(0.5)
+                print('Your ' + chosenpokemon + ' has missed.\n')
+            if pokemon == 'enemy':
+                time.sleep(0.5)
+                print('The wild ' + enemypokemon + ' has missed.\n')
+    if move == 'Sketch':
+        joinedsmearglemoves = ','.join(pokemontruestats['moves'])
+        replacedsmearglemoves = joinedsmearglemoves.replace('Sketch', defendermove, 1)
+        newsmearglemoves = replacedsmearglemoves.split(',')
+        pokemontruestats['moves'] = newsmearglemoves
+        if pokemon == 'chosen':
+            time.sleep(0.5)
+            print('Your ' + chosenpokemon + ' has copied ' + defendermove + '.\n')
+        else:
+            time.sleep(0.5)
+            print('The wild ' + enemypokemon + ' has copied' + defendermove + '.\n')
+    if move == 'Confuse ray':
+        if defendertruestats['confused'] == False:
+            defendertruestats['confused'] == True
+            if pokemon == 'enemy':
+                time.sleep(0.5)
+                print('Your ' + chosenpokemon + ' has been confused!\n')
+            else:
+                time.sleep(0.5)
+                print('The wild ' + enemypokemon + ' has been confused!\n')
+        else:
+            if pokemon == 'enemy':
+                time.sleep(0.5)
+                print('Your ' + chosenpokemon + " is already confused, it can't be confused again!\n")
+            else:
+                time.sleep(0.5)
+                print('The wild ' + enemypokemon + " is already confused, it can't be confused again!\n")
+    if move == 'Thunder wave':
+        if defendertruestats['Type 1'] in ['Electric', 'Ground'] or defendertruestats['Type 2'] in ['Electric', 'Ground']:
+            if pokemon == 'enemy':
+                time.sleep(0.5)
+                print('Your ' + chosenpokemon + ' is unable to be paralyzed.\n')
+            else:
+                time.sleep(0.5)
+                print('The wild ' + enemypokemon + ' is unable to be paralyzed.\n')
+        elif defendertruestats['nonvolatile'] == '0':
+            defendertruestats['nonvolatile'] == 'Paralyzed'
+            defendertruestats['Speed'] *= 0.5
+            if pokemon == 'enemy':
+                time.sleep(0.5)
+                print('Your ' + chosenpokemon + ' has been paralyzed!\n')
+            else:
+                time.sleep(0.5)
+                print('The wild ' + enemypokemon + ' has been paralyzed!\n')
+        else:
+            if pokemon == 'enemy':
+                time.sleep(0.5)
+                print('Your ' + chosenpokemon + ' is already ' + lowercase(defendertruestats['nonvolatile']) + ', it cannot be paralyzed.\n')
+            else:
+                time.sleep(0.5)
+                print('The wild ' + enemypokemon + ' is already ' + lowercase(defendertruestats['nonvolatile']) + ', it cannot be paralyzed.\n')
 
-    else:
-        return times
+
+
+
+def setstatuseffects(pokemon, movefinder, defendertypes, pokemontruestats, defendertruestats, chosenpokemon, enemypokemon):
+    if movefinder['effect_id'] == 'PAR':
+        if 'Electric' in defendertypes:
+            if pokemon == 'enemy':
+                time.sleep(0.5)
+                print('Your ' + chosenpokemon + ' is unable to be paralyzed.\n')
+            else:
+                time.sleep(0.5)
+                print('The wild ' + enemypokemon + ' is unable to be paralyzed.\n')
+        elif random.randrange(0,100) < movefinder['effect_chance']:
+            if typeidtotype(movefinder['type_id']) == 'Electric':
+                if 'Ground' in defendertypes:
+                    if pokemon == 'enemy':
+                        time.sleep(0.5)
+                        print('Your ' + chosenpokemon + ' is unable to be paralyzed.\n')
+                    else:
+                        time.sleep(0.5)
+                        print('The wild ' + enemypokemon + ' is unable to be paralyzed.\n')
+            elif defendertruestats['nonvolatile'] == '0':
+                defendertruestats['nonvolatile'] == 'Paralyzed'
+                defendertruestats['Speed'] *= 0.5
+                if pokemon == 'enemy':
+                    time.sleep(0.5)
+                    print('Your ' + chosenpokemon + ' has been paralyzed!\n')
+                else:
+                    time.sleep(0.5)
+                    print('The wild ' + enemypokemon + ' has been paralyzed!\n')
+            else:
+                if pokemon == 'enemy':
+                    time.sleep(0.5)
+                    print('Your ' + chosenpokemon + ' is already ' + lowercase(defendertruestats['nonvolatile']) + ', it cannot be paralyzed.\n')
+                else:
+                    time.sleep(0.5)
+                    print('The wild ' + enemypokemon + ' is already ' + lowercase(defendertruestats['nonvolatile']) + ', it cannot be paralyzed.\n')
+    if movefinder['effect_id'] == 'BRN':
+        if 'Fire' in defendertypes:
+             if pokemon == 'enemy':
+                 time.sleep(0.5)
+                 print('Your ' + chosenpokemon + ' is unable to be burned.\n')
+             else:
+                 time.sleep(0.5)
+                 print('The wild ' + enemypokemon + ' is unable to be burned.\n')
+        elif random.randrange(0,100) < movefinder['effect_chance']:
+            if defendertruestats['nonvolatile'] == '0':
+                defendertruestats['nonvolatile'] == 'Burned'
+                if pokemon == 'enemy':
+                    time.sleep(0.5)
+                    print('Your ' + chosenpokemon + ' has been burned!\n')
+                else:
+                    time.sleep(0.5)
+                    print('The wild ' + enemypokemon + ' has been burned!\n')
+            else:
+                if pokemon == 'enemy':
+                    time.sleep(0.5)
+                    print('Your ' + chosenpokemon + ' is already ' + lowercase(defendertruestats['nonvolatile']) + ', it cannot be burned.\n')
+                else:
+                    time.sleep(0.5)
+                    print('The wild ' + enemypokemon + ' is already ' + lowercase(defendertruestats['nonvolatile']) + ', it cannot be burned.\n')
+    if movefinder['effect_id'] == 'FRZ':
+        if 'Ice' in defendertypes:
+             if pokemon == 'enemy':
+                 time.sleep(0.5)
+                 print('Your ' + chosenpokemon + ' is unable to be frozen.\n')
+             else:
+                 time.sleep(0.5)
+                 print('The wild ' + enemypokemon + ' is unable to be frozen.\n')
+        elif random.randrange(0,100) < movefinder['effect_chance']:
+            if defendertruestats['nonvolatile'] == '0':
+                defendertruestats['nonvolatile'] == 'Frozen'
+                if pokemon == 'enemy':
+                    time.sleep(0.5)
+                    print('Your ' + chosenpokemon + ' has been frozen!\n')
+                else:
+                    time.sleep(0.5)
+                    print('The wild ' + enemypokemon + ' has been frozen!\n')
+            else:
+                if pokemon == 'enemy':
+                    time.sleep(0.5)
+                    print('Your ' + chosenpokemon + ' is already ' + lowercase(defendertruestats['nonvolatile']) + ', it cannot be frozen.\n')
+                else:
+                    time.sleep(0.5)
+                    print('The wild ' + enemypokemon + ' is already ' + lowercase(defendertruestats['nonvolatile']) + ', it cannot be frozen.\n')
+    if movefinder['effect_id'] == 'FLN':
+        if random.randrange(0,100) < movefinder['effect_chance']:
+            if defendertruestats['flinched'] == False:
+                defendertruestats['flinched'] == True
+    if movefinder['effect_id'] == 'CON':
+        if random.randrange(0,100) < movefinder['effect_chance']:
+            if defendertruestats['confused'] == False:
+                defendertruestats['confused'] == True
+                if pokemon == 'enemy':
+                    time.sleep(0.5)
+                    print('Your ' + chosenpokemon + ' has been confused!\n')
+                else:
+                    time.sleep(0.5)
+                    print('The wild ' + enemypokemon + ' has been confused!\n')
+            else:
+                if pokemon == 'enemy':
+                    time.sleep(0.5)
+                    print('Your ' + chosenpokemon + " is already confused, it can't be confused again!\n")
+                else:
+                    time.sleep(0.5)
+                    print('The wild ' + enemypokemon + " is already confused, it can't be confused again!\n")
+    if movefinder['effect_id'] == 'PSN':
+        if 'Poison' in defendertypes or 'Steel' in defendertypes:
+             if pokemon == 'enemy':
+                 time.sleep(0.5)
+                 print('Your ' + chosenpokemon + ' is unable to be poisoned.\n')
+             else:
+                 time.sleep(0.5)
+                 print('The wild ' + enemypokemon + ' is unable to be poisoned.\n')
+        if random.randrange(0,100) < movefinder['effect_chance']:
+            if defendertruestats['nonvolatile'] == '0':
+                defendertruestats['nonvolatile'] == 'Poisoned'
+                if pokemon == 'enemy':
+                    time.sleep(0.5)
+                    print('Your ' + chosenpokemon + ' has been poisoned!\n')
+                else:
+                    time.sleep(0.5)
+                    print('The wild ' + enemypokemon + ' has been poisoned!\n')
+            else:
+                if pokemon == 'enemy':
+                    time.sleep(0.5)
+                    print('Your ' + chosenpokemon + ' is already ' + lowercase(defendertruestats['nonvolatile']) + ', it cannot be poisoned.\n')
+                else:
+                    time.sleep(0.5)
+                    print('The wild ' + enemypokemon + ' is already ' + lowercase(defendertruestats['nonvolatile']) + ', it cannot be poisoned.\n')
+    stagechanges = [movefinder['stat_change1'], movefinder['stat_change2']]
+    if 'atkup' in stagechanges:
+        if random.randrange(0,100) < movefinder['stat_chance']:
+            if movefinder['affects_who'] == 'player':
+                if pokemontruestats['atkstage'] < 6:
+                    pokemontruestats['atkstage'] += 1
+                    time.sleep(0.5)
+                    print('Your ' + chosenpokemon + "'s Attack rose!\n")
+                else:
+                    time.sleep(0.5)
+                    print('Your ' + chosenpokemon + "'s Attack cannot be increased further.\n")
+            if movefinder['affects_who'] == 'opponent':
+                if defendertruestats['atkstage'] < 6:
+                    defendertruestats['atkstage'] += 1
+                    time.sleep(0.5)
+                    print('The wild ' + enemypokemon + "'s Attack rose!\n")
+                else:
+                    time.sleep(0.5)
+                    print('The wild ' + enemypokemon + "'s Attack cannot be increased further.\n")
+    if 'spdefdown' in stagechanges:
+        if random.randrange(0,100) < movefinder['stat_chance']:
+            if movefinder['affects_who'] == 'player':
+                if pokemontruestats['spdefstage'] < 6:
+                    pokemontruestats['spdefstage'] -= 1
+                    time.sleep(0.5)
+                    print('Your ' + chosenpokemon + "'s Special Defense rose!\n")
+                else:
+                    time.sleep(0.5)
+                    print('Your ' + chosenpokemon + "'s Special Defense cannot be increased further.\n")
+            if movefinder['affects_who'] == 'opponent':
+                if defendertruestats['spdefstage'] < 6:
+                    defendertruestats['spdefstage'] -= 1
+                    time.sleep(0.5)
+                    print('The wild ' + enemypokemon + "'s Special Defense rose!\n")
+                else:
+                    time.sleep(0.5)
+                    print('The wild ' + enemypokemon + "'s Special Defense cannot be increased further.\n")
+    if 'spddown' in stagechanges:
+        if random.randrange(0,100) < movefinder['stat_chance']:
+            if movefinder['affects_who'] == 'player':
+                if pokemontruestats['spdstage'] < 6:
+                    pokemontruestats['spdstage'] -= 1
+                    time.sleep(0.5)
+                    print('Your ' + chosenpokemon + "'s Speed rose!\n")
+                else:
+                    time.sleep(0.5)
+                    print('Your ' + chosenpokemon + "'s Speed cannot be increased further.\n")
+            if movefinder['affects_who'] == 'opponent':
+                if defendertruestats['spdstage'] < 6:
+                    defendertruestats['spdstage'] -= 1
+                    time.sleep(0.5)
+                    print('The wild ' + enemypokemon + "'s Speed rose!\n")
+                else:
+                    time.sleep(0.5)
+                    print('The wild ' + enemypokemon + "'s Speed cannot be increased further.\n")
+    if 'defdown' in stagechanges:
+        if random.randrange(0,100) < movefinder['stat_chance']:
+            if movefinder['affects_who'] == 'player':
+                if pokemontruestats['defstage'] < 6:
+                    pokemontruestats['defstage'] -= 1
+                    time.sleep(0.5)
+                    print('Your ' + chosenpokemon + "'s Defense rose!\n")
+                else:
+                    time.sleep(0.5)
+                    print('Your ' + chosenpokemon + "'s Defense cannot be increased further.\n")
+            if movefinder['affects_who'] == 'opponent':
+                if defendertruestats['defstage'] < 6:
+                    defendertruestats['defstage'] -= 1
+                    time.sleep(0.5)
+                    print('The wild ' + enemypokemon + "'s Defense rose!\n")
+                else:
+                    time.sleep(0.5)
+                    print('The wild ' + enemypokemon + "'s Defense cannot be increased further.\n")
+
+
+
+
+def replaceasmove(outrageorthrash):
+    newlist = []
+    if outrageorthrash == 'outrage':
+        newlist = ['Outrage', 'Outrage', 'Outrage', 'Outrage']
+    if outrageorthrash == 'thrash':
+        newlist = ['Thrash', 'Thrash', 'Thrash', 'Thrash']
+    return newlist
+
+def outrager(pokemon, pokemontruestats, chosenpokemon, enemypokemon):
+    if pokemon == 'chosen':
+        if pokemontruestats['outrageturns'] == 0:
+            pokemontruestats['moves'] = replaceasmove('outrage')
+            pokemontruestats['randoutrageturns'] = random.randint(2,3)
+            pokemontruestats['outrageturns'] += 1
+        elif pokemontruestats['outrageturns'] == pokemontruestats['randoutrageturns']:
+            pokemontruestats['outrageturns'] = 0
+            pokemontruestats['randoutrageturns'] = 0
+            pokemontruestats['moves'] = pokemoveslist[chosenpokemon]
+            if pokemontruestats['confused'] == False:
+                pokemontruestats['confused'] = True
+                time.sleep(0.5)
+                print('Your ' + chosenpokemon + ' has become confused!\n')
+        else:
+            pokemontruestats['outrageturns'] += 1
+    if pokemon == 'enemy':
+        if pokemontruestats['outrageturns'] == 0:
+            pokemontruestats['moves'] = replaceasmove('outrage')
+            pokemontruestats['randoutrageturns'] = random.randint(2,3)
+            pokemontruestats['outrageturns'] += 1
+        elif pokemontruestats['outrageturns'] == pokemontruestats['randoutrageturns']:
+            pokemontruestats['outrageturns'] = 0
+            pokemontruestats['randoutrageturns'] = 0
+            pokemontruestats['moves'] = pokemoveslist[enemypokemon]
+            if pokemontruestats['confused'] == False:
+                pokemontruestats['confused'] = True
+                time.sleep(0.5)
+                print('The wild ' + enemypokemon + ' has become confused!\n')
+        else:
+            pokemontruestats['outrageturns'] += 1
+
+def thrasher(pokemon, pokemontruestats, chosenpokemon, enemypokemon):
+    if pokemon == 'chosen':
+        if pokemontruestats['thrashturns'] == 0:
+            pokemontruestats['moves'] = replaceasmove('thrash')
+            pokemontruestats['randthrashturns'] = random.randint(2,3)
+            pokemontruestats['thrashturns'] += 1
+        elif pokemontruestats['thrashturns'] == pokemontruestats['randthrashturns']:
+            pokemontruestats['thrashturns'] = 0
+            pokemontruestats['randthrashturns'] = 0
+            pokemontruestats['moves'] = pokemoveslist[chosenpokemon]
+            if pokemontruestats['confused'] == False:
+                pokemontruestats['confused'] = True
+                time.sleep(0.5)
+                print('Your ' + chosenpokemon + ' has become confused!\n')
+        else:
+            pokemontruestats['thrashturns'] += 1
+    if pokemon == 'enemy':
+        if pokemontruestats['thrashturns'] == 0:
+            pokemontruestats['moves'] = replaceasmove('thrash')
+            pokemontruestats['randthrashturns'] = random.randint(2,3)
+            pokemontruestats['thrashturns'] += 1
+        elif pokemontruestats['thrashturns'] == pokemontruestats['randthrashturns']:
+            pokemontruestats['thrashturns'] = 0
+            pokemontruestats['randthrashturns'] = 0
+            pokemontruestats['moves'] = pokemoveslist[enemypokemon]
+            if pokemontruestats['confused'] == False:
+                pokemontruestats['confused'] = True
+                time.sleep(0.5)
+                print('The wild ' + enemypokemon + ' has become confused!\n')
+        else:
+            pokemontruestats['thrashturns'] += 1
+
+
+def applyeffects(chosentruestats, enemytruestats, chosenpokemon, enemypokemon):
+    if chosentruestats['nonvolatile'] == 'Burned':
+        time.sleep(0.5)
+        print('Your ' + chosenpokemon + ' is hurt by its burn!')
+        chosentruestats['HP'] -= int((chosentruestats['MAXHP'] / 16) // 1)
+    if chosentruestats['nonvolatile'] == 'Poisoned':
+        time.sleep(0.5)
+        print('Your ' + chosenpokemon + ' is hurt by its poison!')
+        chosentruestats['HP'] -= int((chosentruestats['MAXHP'] / 8) // 1)
+    if enemytruestats['nonvolatile'] == 'Burned':
+        time.sleep(0.5)
+        print('The wild ' + enemypokemon + ' is hurt by its burn!')
+        chosentruestats['HP'] -= int((chosentruestats['MAXHP'] / 16) // 1)
+    if enemytruestats['nonvolatile'] == 'Poisoned':
+        time.sleep(0.5)
+        print('The wild ' + enemypokemon + ' is hurt by its poison!')
+        chosentruestats['HP'] -= int((chosentruestats['MAXHP'] / 8) // 1)
+    chosentruestats['flinched'] = False
+    enemytruestats['flinched'] = False
+
+def resetstatus(dict):
+    dict['confused'] = False
+    dict['confusedturns'] = 0
+    dict['asleepturns'] = 0
+    dict['randsleepturns'] = 0
+    dict['flinched'] = False
+    dict['outrageturns'] = 0
+    dict['randoutrageturns'] = 0
+    dict['thrashturns'] = 0
+    dict['randthrashturns'] = 0
+    dict['atkstage'] = 0
+    dict['defstage'] = 0
+    dict['spatkstage'] = 0
+    dict['spdefstage'] = 0
+    dict['spdstage'] = 0
