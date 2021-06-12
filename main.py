@@ -487,7 +487,7 @@ def gamestart():
                 bag['Pokedollars'] += 500
                 resetstatus(chosentruestats)
                 time.sleep(1)
-                if gamestate = True:
+                if gamestate == True:
                     print('You have gained 500 pokedollars from winning!\n')
 
 
