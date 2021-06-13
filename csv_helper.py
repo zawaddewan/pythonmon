@@ -25,7 +25,10 @@ def make_dict(data):
         values = lists[0]
         d[values] = []
         while i < len(lists):
-            d[values].append(int(lists[i]))
+            if lists[i].isnumeric():
+                d[values].append(int(lists[i]))
+            else:
+                d[values].append(lists[i])
             i += 1
     return d
 
