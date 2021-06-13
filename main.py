@@ -157,7 +157,8 @@ def gamestart():
                 print("You've encountered a wild " + str(enemypokemon) + '.\n')
                 battlestate = True
                 plt.ion()
-                pokecharts(chosentruestats, chosenpokemon, enemypokemon)
+                statcharts(chosentruestats, chosenpokemon, enemytruestats, enemypokemon)
+                hpcharts(chosentruestats, chosenpokemon, enemytruestats, enemypokemon)
                 plt.show()
                 runtimes = 1
                 while battlestate == True:
@@ -520,12 +521,17 @@ def gamestart():
                                         time.sleep(0.5)
                                         print('Your ' + chosenpokemon + ' has missed.\n')
                     applyeffects(chosentruestats, enemytruestats, chosenpokemon, enemypokemon)
+                    plt.close('all')
+                    statcharts(chosentruestats, chosenpokemon, enemytruestats, enemypokemon)
+                    hpcharts(chosentruestats, chosenpokemon, enemytruestats, enemypokemon)
+                    plt.show()
 
                 bag['Pokedollars'] += 500
                 resetstatus(chosentruestats)
                 time.sleep(1)
                 if gamestate == True:
                     print('You have gained 500 pokedollars from winning!\n')
+                    plt.close('all')
 
 
 
