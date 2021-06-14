@@ -28,7 +28,7 @@ pokemoveslist = {'Charizard': ['Air slash','Flamethrower','Dragon breath','Heat 
 
 pokelist = ['Charizard', 'Greninja', 'Raichu', 'Lucario', 'Empoleon', 'Gyarados', 'Smeargle', 'Steelix', 'Ho-oh', 'Talonflame', 'Probopass', 'Genesect', 'Blissey', 'Crobat', 'Golurk', 'Shiftry', 'Pinsir', 'Ampharos', 'Bidoof', 'Clawitzer']
 
-movesfile = open('moves.csv')
+movesfile = open('moves.csv', encoding='utf8')
 moves = movesfile.read()
 movesheader = get_headers(moves)
 movesdata = get_data(moves)
@@ -36,7 +36,7 @@ movesdict = make_dict(movesdata)
 #Below is the final moves data as a dictionary
 movesdictfinal = combine_dict(movesdict, movesheader)
 
-pokemonfile = open('pokemon.csv')
+pokemonfile = open('pokemon.csv', encoding='utf8')
 pokemon = pokemonfile.read()
 pokemonheader = get_headers(pokemon)
 pokemondata = get_data(pokemon)
@@ -44,7 +44,7 @@ pokemondict = make_dict_moves(pokemondata)
 #Below is the final pokemon stats data as a dictionary
 pokemondictfinal = combine_dict(pokemondict, pokemonheader)
 
-logofile = open('logo2.txt')
+logofile = open('logo2.txt', encoding='utf8')
 logo = logofile.read()
 
 def lowercase(s):
