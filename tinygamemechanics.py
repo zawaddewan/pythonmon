@@ -101,7 +101,7 @@ def printpokemoves(dict):
 def effectivenessmessage(effectiveness):
     if effectiveness == 0:
         time.sleep(0.5)
-        print('It was not effective...\n')
+        print('It had no effect...\n')
     elif effectiveness > 1:
         time.sleep(0.5)
         print('It was super effective!\n')
